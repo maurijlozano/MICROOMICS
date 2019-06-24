@@ -93,16 +93,18 @@ Para comenzar el análisis de las secuencias, la primer etapa es cargarlas en el
 ## Colecciones
 Los archivos con las lecturas se pueden organizar en colecciones para simplificar la ejecución de los diferentes programas (procesamiento colectivo), y para organizar de una mejor manera la *historia*.
 ej.
-
+```
    Data sets individuales                           Colección
+   
                                                    ┌─────────────┐
     ┌─ ─ ─ ─ ─ ─ ┐                                 │┌fastq1.f┐ S1│
     ¦fastq1.f S1 ¦                                 │└fastq1.f┘   │
-    ¦fastq1.r S1 ├─────────────────────────────────┼ ─────────── ┤       
+    ¦fastq1.r S1 ├─────────────────────────────────┼ ─────────── ┤
     ¦fastq2.f S2 ¦                                 │┌fastq2.f┐ S2│
     ¦fastq2.r S2 ¦                                 │└fastq2.r┘   │
     └─ ─ ─ ─ ─ ─ ┘                                 └─────────────┘
-                                    
+```
+
 ## Como crear una colección!
 1. Clickear en la tick-box
 2. Seleccionar los dataset de la historia a incluir en la colección
