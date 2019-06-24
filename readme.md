@@ -1,146 +1,11 @@
-Curso 
-========
+MicroOMICS 
+==========
 
 
-#Instalar docker
-Instrucciones en **https://docs.docker.com/install/linux/docker-ce/ubuntu/**
+La parte práctica del curso la realizaremos utilizando una instanica local de Galaxy, por medio de Docker.
+Para instalar docker en sus comutadoras personales (ya estará instalado para el curso) pueden seguir las instrucciones provistas en el enlace siguiente [Instalación de Docker](https://github.com/maurijlozano/MICROOMICS/blob/master/Instalacion_docker_galaxy.md)
 
-##Instalar paquetes necesarios para la instalación de docker
-```
-sudo apt-get update
-sudo apt-get install \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    gnupg-agent \
-    software-properties-common
-```
-
-##Instalar llave para docker
-`curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -`
-
-*Verify that you now have the key with the fingerprint 9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88, by searching for the last 8 characters of the fingerprint.*
-
-`sudo apt-key fingerprint 0EBFCD88`
-
-##add docker repository
-```
-sudo add-apt-repository \
-   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-   $(lsb_release -cs) \
-   stable"
-```
-
-##install docker
-`sudo apt-get update`
-
-Install the latest version of Docker CE and containerd, or go to the next step to install a specific version:
-
-`sudo apt-get install docker-ce docker-ce-cli containerd.io`
-
-##Para correr docker sin sudo!
-```
-sudo usermod -a -G docker user_name
-newgrp docker 
-```
-*El último comando permite “refrescar” el grupo sin tener que reiniciar*
-
-
-##Configuración e instalacion de aplicaciones
-1. Agregar usuario con privilegios de administrador.
-.. Para configurar el administrador, necesario para instalar packetes desde el *Toolshed*, es necesario editar/crear en la carpeta compartida el archivo config/galaxy.yml
-2. 
-
-##Algunos comandos útiles de docker
-```
-docker search TEXT #Busca en el repositorio las imagenes con TEXT
-docker pull REPOSITORY[:TAG] #Para bajar una imagen:tag, donde el tag, corresponde, por ejemplo, a la version. Las tags, hay que buscarlas en Docker Hub: https://hub.docker.com/.
-docker images #Lista las imagenes instaladas
-docker tag IMAGE_ID REPOSITORY:TAG #Cambia el repositorio y tag, por si queremos hacer modificaciones, o para correrlo de forma más facil
-docker run -i -t IMAGE_ID #Carga el contenedor por su IMAGE_ID y accede al mismo
-docker ps -a #lista todos los contenedores creados y si estan activos on fueron cerrados
-docker start IMAGE_ID #Carga el contenedor pero sin acceder. Para acceder de esta forma hay que correr el comando atach
-docker stop IMAGE_ID #Cierra la imagen
-docker atach IMAGE_ID #Accede a una imagen que se encuentre corriendo
-docker commit CONTAINER_ID REPOSITORY:TAG # La instancia de una imagen es un contenedor, si se hacen cambios, para que se guarden en la imagen hay que hacer un commit.
-docker rm CONTAINER_ID #borrar contenedor
-docker rmi IMAGE_ID #borrar imagen 
-```
-
-### Dentro de una imagen
-```
-exit #Cierra la imagenes
-detach #Sale de la imagen pero sin cerrarla, util en el caso de servidores como el de Galaxy
-```
-
-
-Aplicaciones Instaladas
-========================
-
-#Correr Galaxy docker
-`docker run -d -p 8080:80 -v ~/galaxy_storage/:/export/ bgruening/galaxy-stable`
-
-En este comando, el texto siguiente *"~/galaxy_storage/"* debe ser reemplazado por la ruta en la cual se guardarán los archivos.
-
-*Ejemplo:*
-`docker run -d -p 8080:80 -v ~/Programas/galaxy_storage/:/export/ bgruening/galaxy-stable`
-
-## Toolshed
-El repositorio de galaxy, toolshed, puede utilizarse para instalar muchos programas para el analisis de datos, ya sea de secuenciación, como de transcriptómica, metabolómica y muchas otras aplicaciones bioinformáticas.
-
-###Programas normalmente utilizados [Instalado]:
-1. FASTQ Quality control
-..* FastQC **[Instalado]**
-..* MultiQC **[Instalado]**
-
-2. FAST/FASTQ TOOLS
-..* Trimmomatic **[Instalado]**
-..* cutadapt
-..* trim_galore
-..* fastq_combiner, fastq_filter, fastq_groomer, fastq_join, fastq_manipulation, fastq_masker_by_quality, fastq_paired_end_deinterlacer, fastq_paired_end_interlacer, fastq_paired_end_joiner, fastq_paired_end_splitter, fastq_qc_trimmer, fastq_quality_filter, fastqtofasta, fastq_trimmer, fastq_trimmer_by_quality
- 
-3. NGS Mapping
-..* BWA / BWA-MEM
-..* Bowtie2 **[Instalado]**
-..* RNA STAR
-..* TopHat
-..* HISAT2 **[Instalado]**
-..*JBROWSE **[Instalado]**
-
-4. NGS PICARD TOOLS
-
-5. NGS SAM TOOLs
-
-6. NGS Assembly
-..* Create assemblies with Unicycler -SPAdes- **[Instalado]**
-..* Quast Genome assembly Quality **[Instalado]**
-
-7. NGS ANNOTATION
-..* Prokka: Prokaryotic genome annotation **[Instalado]**
-
-
-8. NGS TRANSCRIPTOME RECONSTRUCTION
-..* StringTie merge transcripts
-..* StringTie transcript assembly and quantification
-..* Cufflinks
-..* Cuffcompare
-..* Cuffmerge
-
-9. NGS TRANSCRIPTOME ANALYSIS
-..* Filter Combined Transcripts using tracking file
-..* GffCompare compare assembled transcripts to a reference annotation
-..* Gffread
-..* FeatureCounts Measure gene expression in RNA-Seq experiments from SAM or BAM files
-..* Htseq-count
-..* Cuffnorm
-..* Cuffquant
-..* DESeq2
-
-..* cummeRbund @pedir instalar en R directamente..
-..* Ballgown @pedir instalar en R directamente
-
-10. BED TOOLS
-
+Adicionalmente, encontrará información sobre la imagen de docker utilizada en el curso en el enlace siguiente [MicroOmics](https://github.com/maurijlozano/MICROOMICS/blob/master/Instalacion_docker_galaxy.md)
 
 
 Trabajo Práctico
@@ -175,6 +40,16 @@ Dicho esto, como **objetivo del trabajo práctico** nos planteamos los siguiente
 
 Día 1
 -----
+
+
+# Correr Galaxy docker
+`docker run -d -p 8080:80 -v ~/galaxy_storage/:/export/ bgruening/galaxy-stable`
+
+En este comando, el texto siguiente *"~/galaxy_storage/"* debe ser reemplazado por la ruta en la cual se guardarán los archivos.
+
+*Ejemplo:*
+`docker run -d -p 8080:80 -v ~/Programas/galaxy_storage/:/export/ bgruening/galaxy-stable`
+
 Para la realización del TP, además de esta guía se pueden utilizar la página [Galaxy Training!](https://galaxyproject.github.io/training-material/topics/introduction/tutorials/galaxy-intro-ngs-data-managment/tutorial.html) 
 
 
