@@ -1,6 +1,28 @@
-MicroOMICS 
+MicroOmics
 ==========
+![alt text](https://github.com/maurijlozano/MICROOMICS/blob/master/dockerweb.png)
 
+# Objetivos:
+Que los alumnos logren:
+- Adquirir habilidades para el desarrollo y análisis de resultados ómicos en el área de la microbiología
+- Generar espacios de análisis de casos y discusión de resultados de trabajos científicos publicados de la temática
+
+# Programa resumido
+Las actividades del curso constarán de clases teóricas, seminarios y un trabajo práctico.
+Día 1: Genómica (8hs).Introducción del tema y estudio de casos.
+Día 2: Transcriptómica (8hs). Introducción del tema y estudio de casos.
+Día 3: Proteómica (8hs). Introducción del tema y estudio de casos.
+Día 4: Metabolómica(8hs). Introducción del tema y estudio de casos.
+Día 5: Mañana: Presentación de seminarios y proyectos de investigación de los alumnos; Tarde: Evaluación
+
+- **Genómica**: Plataformas de secuenciación. Historia y últimas tecnologías. Procesamiento de lecturas y ensamblado. Anotación de genomas. Homología. Filogenia. Genómica comparativa.
+- **Transcriptómica**: Antecedentes, otros métodos para la evaluación diferencial de la expresión. RNAseq. Procesamiento, análisis y visualización de los resultados. RNAseq de reguladores transcripcionales. Búsqueda de reguladores, mutagenesis y transcriptómica. Búsqueda de determinantes involucrados en la comunicación rizobio-leguminosa durante la simbiosis mediante Dual-RNAseq. Redes regulatorias de la expresión de flagelos en Bradyrhizobium diazoefficiens. Caracterización molecular de los mecanismos que regulan la transferencia conjugativa de plásmidos en rizobios. 
+- **Proteómica**: Teoría e historia. Aplicaciones. Métodos. DIGE / Orbitrap. Análisis de los datos cuantitativos.
+- **Metabolómica**: Definiciones. Aproximaciones experimentales para la determinación de metabolitos celulares. Visualización de redes metabólicas. Respuesta severa en Bradyrhizobium diazoefficiens y su relación con la simbiosis en soja. Aproximaciones ómicas. 
+- **Trabajo práctico**: Manipulación de secuencias. Bases de datos (Uniprot/Pfam). Ensamblaje de un genoma y análisis comparativo del mismo. Mapeo de lecturas de RNAseq, análisis diferencial y visualización de resultados.
+
+
+# Información
 
 La parte práctica del curso la realizaremos utilizando una instanica local de Galaxy, por medio de Docker.
 Para instalar docker en sus comutadoras personales (ya estará instalado para el curso) pueden seguir las instrucciones provistas en el enlace siguiente [Instalación de Docker](https://github.com/maurijlozano/MICROOMICS/blob/master/Instalacion_docker_galaxy.md)
@@ -21,21 +43,21 @@ Estas secuencias pueden ser obtenidas a partir de muestras de ADN o ARN con dife
 Dicho esto, como **objetivo del trabajo práctico** nos planteamos los siguientes puntos:
 
 1. Día 1: A partir de datos de un experimento de secuenciación:
-..* Analizar la calidad de las secuencias obtenidas
-..* Realizar el trimming y filtrado de las secuencias
-..* Mapear las secuencias a un genoma de referencia
-...* Obtener el genoma y realizar la búsqueda de variantes
-..* Realizar el ensamblado *de novo* de las secuencias
-...* Analizar la calidad de los resultados
-..* Realizar la anotación del genoma
+    * Analizar la calidad de las secuencias obtenidas
+    * Realizar el trimming y filtrado de las secuencias
+    * Mapear las secuencias a un genoma de referencia
+        * Obtener el genoma y realizar la búsqueda de variantes
+    * Realizar el ensamblado *de novo* de las secuencias
+        * Analizar la calidad de los resultados
+    * Realizar la anotación del genoma
 
 2. Día 2: A partir de datos de un experimento de RNAseq:
-..* Analizar la calidad de las secuencias obtenidas
-..* Realizar el trimming y filtrado de las secuencias
-..* Mapear las secuencias a un genoma de referencia
-..* Reconstruir el transcriptoma
-..* Realizar el recuento de secuencias para cada transcripto
-..* Realizar el análisis de expresión diferencial
+    * Analizar la calidad de las secuencias obtenidas
+    * Realizar el trimming y filtrado de las secuencias
+    * Mapear las secuencias a un genoma de referencia
+    * Reconstruir el transcriptoma
+    * Realizar el recuento de secuencias para cada transcripto
+    * Realizar el análisis de expresión diferencial
 
 
 Día 1
@@ -47,13 +69,11 @@ Día 1
 
 En este comando, el texto siguiente *"~/galaxy_storage/"* debe ser reemplazado por la ruta en la cual se guardarán los archivos.
 
-*Ejemplo:*
-`docker run -d -p 8080:80 -v ~/Programas/galaxy_storage/:/export/ bgruening/galaxy-stable`
 
 Para la realización del TP, además de esta guía se pueden utilizar la página [Galaxy Training!](https://galaxyproject.github.io/training-material/topics/introduction/tutorials/galaxy-intro-ngs-data-managment/tutorial.html) 
 
 
-#Crear historia
+# Crear historia
 
 * Hacer un click en el icono de un engranaje (**History options**) en la parte superior del panel **history**
 * Hacer un click en **Create New**
@@ -61,16 +81,16 @@ Para la realización del TP, además de esta guía se pueden utilizar la página
 * Escribir el nuevo nombre
 
 
-#Cargando los datos de secuenciación
+# Cargando los datos de secuenciación
 Como ya se vio en la teoría existen diversas tecnologías de secuenciación, a partir de las cuales obtendremos 1 o múltiples archivos, en general, de tipo FASTQ.
 Para comenzar el análisis de las secuencias, la primer etapa es cargarlas en el servidor de galaxy. Nosotros ahora estamos trabajando en una instancia local del servidor, por lo que la carga de archivos será rápida. **Recuerden, que si utilizaran el servidor online, según el tamaño de los archivos la carga puede ser lenta, y para archivos grandes se recomienda utilizar ftp.**
 
-##Procedimiento
+## Procedimiento
 1. En el panel de la izquierda, seleccionar el icono **upload**, o seleccionar **Get Data** -> **Upload File from your computer**
-..* Seleccionar la opción: **chose local file**
+    * Seleccionar la opción: **chose local file**
 
 
-##Colecciones
+## Colecciones
 Los archivos con las lecturas se pueden organizar en colecciones para simplificar la ejecución de los diferentes programas (procesamiento colectivo), y para organizar de una mejor manera la *historia*.
 ej.
 
@@ -83,30 +103,30 @@ ej.
     ¦fastq2.r S2 ¦                                 │└fastq2.r┘   │
     └─ ─ ─ ─ ─ ─ ┘                                 └─────────────┘
                                     
-##Como crear una colección!
+## Como crear una colección!
 1. Clickear en la tick-box
 2. Seleccionar los dataset de la historia a incluir en la colección
 3. Clickear en **for all selected**
 4. Seleccionar el tipo de colección a crear
-..* Puede ser **Build Dataset List** -> para datasets no **paired-end**
-..* Puede ser **Build List of Dataset pairs** -> para datasets no **paired-end**
-...* En este caso se pueden usar filtros para que se seleccionen automáticamente los pares de muestras
-...* Para lecturas pareadas es conveniente generar ambos tipos de colecciones.
+    * Puede ser **Build Dataset List** -> para datasets no **paired-end**
+    * Puede ser **Build List of Dataset pairs** -> para datasets no **paired-end**
+        * En este caso se pueden usar filtros para que se seleccionen automáticamente los pares de muestras
+        * Para lecturas pareadas es conveniente generar ambos tipos de colecciones.
 
-###También se puede cargar las secuencias directamente a una colección!
+### También se puede cargar las secuencias directamente a una colección!
 
-##Operaciones con colecciones
+## Operaciones con colecciones
 1. las colecciones se pueden renombrar
 2. Etiquetas: hay dos tipos de etiquetas
---* Clickear an el icono de etiqueta
-..* normales
-..* hashtag -> estas se propagan a lo largo del prcocesamiento
+    * Clickear an el icono de etiqueta
+    * normales
+    * hashtag -> estas se propagan a lo largo del prcocesamiento
 
-*Es util cuando relicemos un mapeo tildar la opción* ***set reads group information***. Esto nos va a permitir luego unir los data sets en uno solo archivo sin perder información -> NGS: Picard → MergeSam
+* Es util cuando relicemos un mapeo tildar la opción* ***set reads group information***. Esto nos va a permitir luego unir los data sets en uno solo archivo sin perder información -> NGS: Picard → MergeSam
 
 
-#Manipulación y control de calidad de archivos FASTQ
-##¿Qué es el formato FASTQ?
+# Manipulación y control de calidad de archivos FASTQ
+## ¿Qué es el formato FASTQ?
 El formato FASTQ es un formato para datos de secuenciación que además de incluir la secuencia para cada lectura incluye la *calidad* para cada posición. En la actualidad, el estándar es el formato FASTQ sanger que se muestra a continuación.
 
 ```
@@ -123,8 +143,8 @@ La cuarta linea contiene el puntaje de calidad en codificado como una serie de c
 La calidad Q es un entero representando la probabilidad *p* de que la base asignada sea incorrecta. Para una probabilidad menor a 0.05 -> Q tiene que ser mayor a ~13. **Q = -10 log(p)** 
 En general, el punto de corte utilizado es un valor de ~>20, correspondiente a una p < 0.01, ed decir un error cada 100 bases (99% de precisión).
 
-##Distintos formatos de archivo FASTQ
-###Paired end vs mate-pair
+## Distintos formatos de archivo FASTQ
+### Paired end vs mate-pair
 Existen distintos tipos de experimentos de secuenciación, que generan diferentes tipos de archivos FASTQ. Estos experimentos fueron pensados con dos objetivos: a. aumentar el largo de cada lectura (paired end) y b. conectar regiones genómicas alejadas en una longitud determinada (2kb, 8kb, etc) para lograr el ensamblado de genomas cerrados (mate pair). Con el advenimiento de los métodos de secuenciación de fragmentos largos (Nanopore, PACBIO) la tecnología mate pair está dejándose de usar.  
 
 En ambos casos un fragmento determinado de la biblioteca de ADN es secuenciado de ambos extremos, quedando ambas secuencias vinculadas (ver ID de la secuencias). En estos casos se pueden obtener dos tipos de archivos FASTQ: 
@@ -164,45 +184,45 @@ CCTAACCCTAACCCTAACCCTAACCCTAACCCTAACCCTAACCCTAAC
 +
 ```
 
-##Determinando la calidad de las lecturas - FastQC
+## Determinando la calidad de las lecturas - FastQC
 La principal herramienta que vamos a usar es FastQC. Adicionalmente, el análisis de muestras múltiples se puede realizar utilizando MultiQC, esta herramienta toma el output de varios análisis de FastQC y los muestra de forma comparativa.
 
 1. En el panel de herramientas, seleccionar FASTQ Quality control -> FastQC
-..* En *Short read data from your current history* seleccionar las lecturas a analizar (este procedimiento debe realizarse para cada lectura). *Acá, se puede elegir cargar una lista o colección!*. Lo mejor es usar una lista no pareada para poder analizar los datos en conjunto con MultiQC.
+    * En *Short read data from your current history* seleccionar las lecturas a analizar (este procedimiento debe realizarse para cada lectura). *Acá, se puede elegir cargar una lista o colección!*. Lo mejor es usar una lista no pareada para poder analizar los datos en conjunto con MultiQC.
 
 * En la *historia* abrir el archivo html generado
 * Diferentes datos para analizar
-.* Per base sequence quality: x= posición a lo largo de las lecturas, y= calidad (Phred). 
-.* Per base sequence content: x= posición a lo largo de las lecturas, y= frecuencia de cada bases
-.* Per base N content: x= posición a lo largo de las lecturas, y= %N
-.* Adapter Content: x= posición a lo largo de las lecturas, y= % Adaptadores
-.* Per sequence quality scores: x= calidad (Phred), y= número de secuencias
-.* Per sequence GC content: x= %GC medio, y = número de secuencias
-.* Sequence length distribution: x= largo de la secuencia, y= número de secuencias
-.* Sequence Duplication Levels: x= grado de duplicación, y= % de secuencias
+    * Per base sequence quality: x= posición a lo largo de las lecturas, y= calidad (Phred). 
+    * Per base sequence content: x= posición a lo largo de las lecturas, y= frecuencia de cada bases
+    * Per base N content: x= posición a lo largo de las lecturas, y= %N
+    * Adapter Content: x= posición a lo largo de las lecturas, y= % Adaptadores
+    * Per sequence quality scores: x= calidad (Phred), y= número de secuencias
+    * Per sequence GC content: x= %GC medio, y = número de secuencias
+    * Sequence length distribution: x= largo de la secuencia, y= número de secuencias
+    * Sequence Duplication Levels: x= grado de duplicación, y= % de secuencias
 
 2. Para analizar una colección en conjunto utilizar MultiQC
 * Una vez corrido el FastQC, se puede analizar los datos en su conjunto mediante MultiQC.
-..* En MultiQC seleccionar como herramienta con la que se obtuvieron los resultados FastQC. MultiQC puede trabajar con resultados de colecciones tipo flat (no pareadas).
+    * En MultiQC seleccionar como herramienta con la que se obtuvieron los resultados FastQC. MultiQC puede trabajar con resultados de colecciones tipo flat (no pareadas).
 
-##Filtrado y recortado
+## Filtrado y recortado
 La etapa siguiente es filtrar y recortar las secuencias basándonos en el análisis de calidad, ya que secuencias en las que los nucleótidos incorporados tienen alto error podrían generar sesgos en los análisis posteriores.
 El procesamiento típico de las secuencias incluye:
 * Filtrado de secuencias con 
-..* un score medio bajo 
-..* secuencias muy cortas
-..* con muchas Ns
-..* según su %GC
+    * un score medio bajo 
+    * secuencias muy cortas
+    * con muchas Ns
+    * según su %GC
 
 * Cortado y enmascarado de secuencias:
-..* en las regiones de baja calidad
-..* en su comienzo o final
-..* recortado de secuencias correspondientes a adaptadores
+    * en las regiones de baja calidad
+    * en su comienzo o final
+    * recortado de secuencias correspondientes a adaptadores
 
 1. Filtrado/enmascarado/recortado de secuencias
 Para realizar el filtrado/recortado de las secuencias se pueden utilizar varios programas: Trimmomatic, Trim Galore, Cutadapt y otros.
 
-###Trimmomatic! **[Instalado]**
+### Trimmomatic! **[Instalado]**
 ILLUMINACLIP: remueve adaptadores y secuencias específicas de illumina.
 SLIDINGWINDOW: realiza el recorte por 'sliding window', cortando una vez que la calidad promedio de la ventana cayó por debajo de un determinado valor.
 MINLEN: elimina la lectura si tiene un largo menor al mínimo.
@@ -215,26 +235,26 @@ MAXINFO: corte adaptativo, maximiza el valor de cada lectura balanceando el larg
 
 Para secuencias pareadas Trimmomatic devuelve dos resultados, uno en el que ambos pares están presentes, y un segundo resultado conteniendo las secuencias no pareadas.
 
-###otra opción: Cutadapt
-..* Utilizar Cutadapt con los siguientes parámetros
-...* “Single-end or Paired-end reads?”: Paired-end
-...* param-file “FASTQ/A file #1”: reads_1 (Input dataset)
-...* param-file “FASTQ/A file #2”: reads_2 (Input dataset)
+### otra opción: Cutadapt
+    * Utilizar Cutadapt con los siguientes parámetros
+        * “Single-end or Paired-end reads?”: Paired-end
+        * param-file “FASTQ/A file #1”: reads_1 (Input dataset)
+        * param-file “FASTQ/A file #2”: reads_2 (Input dataset)
 
-..* Read options: Para las opciones de la lectura1 y lectura 2:
-...* **En esta parte hay que indicar que adaptadores fueron usados, en algunos casos el proveedor del servicio de secuenciación nos puede enviar las secuencias con los adaptadores ya removidos...**
+    * Read options: Para las opciones de la lectura1 y lectura 2:
+    * **En esta parte hay que indicar que adaptadores fueron usados, en algunos casos el proveedor del servicio de secuenciación nos puede enviar las secuencias con los adaptadores ya removidos...**
 
-..* En “Adapter Options” -> “Minimum overlap length”: 3
-..* En "filter Options” -> “Minimum length”: 20
-..* En “Read Modification Options” -> “Quality cutoff”: 20
-..* En “Output Options” -> “Report”: Yes
+    * En “Adapter Options” -> “Minimum overlap length”: 3
+    * En "filter Options” -> “Minimum length”: 20
+    * En “Read Modification Options” -> “Quality cutoff”: 20
+    * En “Output Options” -> “Report”: Yes
 
-*En el caso de colecciones pareadas, Cutadapt devuelve las lecturas por separado...*
+* En el caso de colecciones pareadas, Cutadapt devuelve las lecturas por separado...*
 
 [Mirar como funciona el algoritmo de Cutadapt!](https://galaxyproject.github.io/training-material/topics/sequence-analysis/tutorials/quality-control/tutorial.html)
  
 
-###otra ocpción -> Trim Galore!
+### otra ocpción -> Trim Galore!
 * Seleccionar ->  “Is this paired- or single-end”: Paired-end
 * Seleccionar -> param-file “Reads in FASTQ format #1”: 
 * Seleccionar -> param-file “Reads in FASTQ format #2”: 
@@ -244,12 +264,12 @@ Para secuencias pareadas Trimmomatic devuelve dos resultados, uno en el que ambo
 El mapeo es el proceso mediante el cual las lecturas se alinean a un genoma de referencia. Los programas para realziar el mapeo toman como input un genoma de referencia y los sets de lecturas. El objetivo es alinear cada lectura en los archivos fastq en el genoma de referencia, permitiendo algunos errores (mismatches), indels (deleciones o inserciones) y el cortado de algunos fragmentos cortos en los extremos de las lecturas-
 En la actualidad hay mas de 60 programas diferentes para realizar el mapeo, y el número sigue creciendo. En el trabajo práctico utilizaremos algunos de los más comunes como el Bowtie2, o el BWA.
 
-###Crear Genoma de referencia
+### Crear Genoma de referencia
 1. Lo primero es normalizar el archivo fasta ->  "NormalizeFasta with the options to wrap sequence lines at 80 bases and to trim the title line at the first whitespace"
  
 2. Dirigirse a la pestaña User y seleccionar *Custom Build*
 
-##Bowtie2 **[Instalado]**
+## Bowtie2 **[Instalado]**
 Para ejecutar el mapeador Bowtie2, necesitamos el genoma de referencia contra el cual alinear las lecturas. Para ello debemos cargar los archivos fasta en la historia. Es recomendable además agregarlo a un *custom build*, que es la forma que usan la mayoría de las aplicaciones para seleccionar genomas de referencia.
 
 El programa Bowtie2 toma los siguientes argumentos:
@@ -266,7 +286,7 @@ Ejemplo para lecturas de un experimento paired-end.
 4. “Select analysis mode”: Default setting only
     They can have an impact on the mapping and improving it.
 5. “Save the bowtie2 mapping statistics to the history”: **Yes**
-.* Esta opción es importante, nos va a permitir mirar la estadística del mapeo.
+    * Esta opción es importante, nos va a permitir mirar la estadística del mapeo.
 6. Inspeccionar los resultados del mapeo clickeando en el icono **galaxy-eye**
 
 Es interesante notar que algunas lecturas pueden ser mapeadas en varias posiciones (multi-mapped reds), estas en general corresponden a repeticiones en el genoma de referencia y son más abundantes cuando el largo de lectura es chico. Como es dificil determinar de donde provienen esas lecturas la mayoría de los mapeadores las ignoran.
@@ -350,7 +370,7 @@ Donde type puede ser de las siguientes clases: A - Character, i - Integer, f - F
 La etiqueta varía según el ensamblador, pueden ser: AS (alignment score), BC (Barcode sequence), HI (cual es la primer posición de la lectura que alinea), NH (Número de alineamientos para la secuencia), NM (distancia de la secuencia a la referencia, es 0 si son idénticas), MD (Posición exacta de los mismatches) y RG (Read Group).
 Los Tags comenzando con X, Y y Z no están estandarizadas. Por ejemplo XS, es usada por TopHat para indicar la hebra, mientras que el mismo tag es usado por BWA y Bowtie2 para guardar el score del mejor alinemiento, en casos de lecturas que mapean en sitios múltiples.
 
-###Otra opción BWA / BWA-MEM
+### Otra opción BWA / BWA-MEM
 Otro mapeador altamente utilizado es BWA. 
 
 
@@ -419,15 +439,10 @@ Los tags mas usados son los siguientes:
 * LB, Identidad de la preparación de ADN. Es utilizado por MarkDuplicates para determinar que grupos podrían tener duplicados, en el caso en que se hallan usado muchas calles. 
 
 
-#Mirar lo de crear custom bubilds (genomas para poder utilizar visualización!!!
-
-
-
-
 Día 2: RNAseq
 -------------
 
-#Introducción
+# Introducción
 [Referencia](https://galaxyproject.org/tutorials/rb_rnaseq/)
 [Referencia2](https://galaxy-au-training.github.io/tutorials/modules/dge/#upload-files-to-galaxy)
 
@@ -449,7 +464,7 @@ Como la transcriptasa reversa requiere un oligonucleótido que actúe como cebad
 Por ejemplo, para Eucariotas es común utilizar como cebador oligo-dT, ya que los mRNAs procesados están poliadenilados.
 Otra estrategia muy utilizada es utilizar oligonucleótidos de secuencia aleatoria (random priming) que permitirán la transcripción reversa en múltiples sitios internos.
 
-##RNAseq específico de hebra (Strand-specific)
+## RNAseq específico de hebra (Strand-specific)
 Los RNAs son de una sola cadena y por consiguiente tienen polaridad. En los experimentos mas típicos de RNAseq la polaridad se pierde ya que se construye una biblioteca a partir del DNA doble cadena. Existen diversos métodos para generar una biblioteca strand-specific, que involucran en general la ligación de adaptadores en los extremos del RNA (los más comunes son Illumina TrueSeq RNAseq kits and dUTP tagging).
 
 Dependiendo del método utilizado, tenemos que tener cuidado de como interpretar los datos. En general una inspección visual de las lecturas mapeadas puede darnos información sobre el tipo de biblioteca que tenemos.
@@ -461,50 +476,50 @@ El procesamiento en términos generales implica:
 1. Determinación de calidad de las lecturas
 2. Filtrado y cortado de adaptadores
 3. Mapeo contra el genoma de referencia 
-.* Acá, tenemos que tener en cuanta si el organismo en estudio es pro- o eucariota. En el caso de organismos eucariotas tendremos que tener en cuenta el que as secuencias solo mapearán en los exones, y algunas de ellas atravesarán de un exón a otro. En estos casos se utilizan *spliced mappers* como TopHat, HiSat y STAR.
+    * Acá, tenemos que tener en cuanta si el organismo en estudio es pro- o eucariota. En el caso de organismos eucariotas tendremos que tener en cuenta el que as secuencias solo mapearán en los exones, y algunas de ellas atravesarán de un exón a otro. En estos casos se utilizan *spliced mappers* como TopHat, HiSat y STAR.
 4. Reconstrucción del transcriptoma
-.* En esta etapa, las lecturas mapeadas al genoma y con las uniones de exones, son utilizadas para construir modelos de transcriptoma (Splicing alternativos). Existen distintas herramientas, una de las más utilizadas es cufflinks (y ahora del mismo grupo Stringtie). Nuevamente, esto no será necesario para el análisis del transcriptoma de procariotas.
+    * En esta etapa, las lecturas mapeadas al genoma y con las uniones de exones, son utilizadas para construir modelos de transcriptoma (Splicing alternativos). Existen distintas herramientas, una de las más utilizadas es cufflinks (y ahora del mismo grupo Stringtie). Nuevamente, esto no será necesario para el análisis del transcriptoma de procariotas.
 5. La siguiente etapa es la cuantificación de los transcriptos. 
-.* Esto implica asignar las lecturas a los transcriptos. En este punto, Cufflinks (Stringtie) ya tienen la información sobre que lecturas mapean contra cada transcripto, por lo que solo resta contarlas! Stringtie, adicionalmente realiza la cuantificación.
-.* Existen otras herramientas que mapean directamente las lecturas al transcriptoma, asumiendo que existe un transcriptoma de buena calidad para el organismo en cuestión (en general se usa en humanos o ratón; Sailfish, Kallisto, Salmon)
-.* El recuento de las lecturas asociadas a cada transcripto en general es una muy mala aproximación a la cantidad de transcripto, esto se debe distintos factores, principalmente el largo del transcripto. Por ende, los recuentos deben ser normalizados. Existen distintos métodos de normalización:
-..* Normalización dentro de una misma muestras (RPKM, FPKM, TPM, rlog)
-..* Normalización entre muestras
+    * Esto implica asignar las lecturas a los transcriptos. En este punto, Cufflinks (Stringtie) ya tienen la información sobre que lecturas mapean contra cada transcripto, por lo que solo resta contarlas! Stringtie, adicionalmente realiza la cuantificación.
+    * Existen otras herramientas que mapean directamente las lecturas al transcriptoma, asumiendo que existe un transcriptoma de buena calidad para el organismo en cuestión (en general se usa en humanos o ratón; Sailfish, Kallisto, Salmon)
+    * El recuento de las lecturas asociadas a cada transcripto en general es una muy mala aproximación a la cantidad de transcripto, esto se debe distintos factores, principalmente el largo del transcripto. Por ende, los recuentos deben ser normalizados. Existen distintos métodos de normalización:
+    * Normalización dentro de una misma muestras (RPKM, FPKM, TPM, rlog)
+    * Normalización entre muestras
 6. Análisis de expresión diferencial
-.* Es importante tener en cuanta que los valores normalizados anteriormente no deben compararse entre condiciones para determinar el el grado de expresión diferencial. Con este objetivo existen herramientas específicas que calcualrán la magnitud del cambio y su significancia estadística, teniendo en cuenta, si existe, la información de las réplicas biológicas.
-.* Las mejores aplicaciones para realizar el análisis diferencial son edgeR, DESeq/DESeq2, y limma-voom.
+    * Es importante tener en cuanta que los valores normalizados anteriormente no deben compararse entre condiciones para determinar el el grado de expresión diferencial. Con este objetivo existen herramientas específicas que calcualrán la magnitud del cambio y su significancia estadística, teniendo en cuenta, si existe, la información de las réplicas biológicas.
+    * Las mejores aplicaciones para realizar el análisis diferencial son edgeR, DESeq/DESeq2, y limma-voom.
 
 
-#Generar las colecciones
+# Generar las colecciones
 En este caso nos va a interesar generar dos colecciones, una para las lecturas correspondientes a E. coli* crecida en medio LB y otra para las correspondientes a *E. coli* crecidas en medio MG.
 Adicionalmente, podemos crear una colección con todas las lecturas para hacer el control de calidad.
 
-#Determinar la calidad de las lecturas - FastQC / filtrados y recortes (Trimmomatic)
+# Determinar la calidad de las lecturas - FastQC / filtrados y recortes (Trimmomatic)
 Igualmente que en el caso anterior, es importante verificar la calidad de las lecturas obtenidas y realizar los filtrados y recortes necesarios.
-*Correr el FastQC en la colección con todas las lecturas
-*Correr el MultiQC con los resultados de FastQC
-*Analizar los datos
+* Correr el FastQC en la colección con todas las lecturas
+* Correr el MultiQC con los resultados de FastQC
+* Analizar los datos
 
-#Genoma de referencia
+# Genoma de referencia
 El genoma de referencia es el de *E. coli* K12. Acá es mecesario convertir el archivo .gtf a .gff.
 Para ello en la historia seleccionar el archivo, clickear en el icono 'edit' y seleccionar la opción convertir.
 
-#Mapeo de las lecturas obtenidas
+# Mapeo de las lecturas obtenidas
 Como las lecturas que tenemos provienen de un estudio de RNAseq de procariotas, no es necesario que realicemos un mapeo que tenga en cuenta splicing. Por ello realizaremos el mapeo con Bowtie2. **Recordar seleccionar la opción para que reporte la estadística del mapeo**
 Para analizar los resultados de todas las lecturas utilizar MultiQC.
 Adicionalmente, no será necesario realizar la reconstrucción del transcriptoma.
 
-#Visualizar las lecturas mapeadas en JBROWSE
+# Visualizar las lecturas mapeadas en JBROWSE
 De la misma forma que antes se puede utilizar JBROWSE para ver las lecturas mapeadas al transcriptoma de *E. coli*. Acá hay que agregar las pistas del genoma con su anotación y de los archivos SAM del mapeo.
 Mirando los resultados, tratar de determinar si nuestras secuencias vienen de una biblioteca 'stranded'.
 
-#Recuento y análisis de expresión diferencial de secuencias que mapean en cada transcripto
+# Recuento y análisis de expresión diferencial de secuencias que mapean en cada transcripto
 Utilizaremos el programa featurecounts
 En opciones hay que elegir:
-.* Alignment file -> Alineamiento hecho con Bowtie2 (SAM/BAM)
-.* Specify strand information -> Stranded (Forward)
-..* Esto se puede ver a partir de los resultados del alineamiento con Bowtie2, o con el protocolo utilizado para obtener las lecturas.
-.* Gene annotation file	-> history -> Ecoli_k12.gtf
+* Alignment file -> Alineamiento hecho con Bowtie2 (SAM/BAM)
+* Specify strand information -> Stranded (Forward)
+    * Esto se puede ver a partir de los resultados del alineamiento con Bowtie2, o con el protocolo utilizado para obtener las lecturas.
+* Gene annotation file	-> history -> Ecoli_k12.gtf
 
 
 ##Inspección de los resultados utilizando el Scratchbook! 
@@ -520,14 +535,14 @@ Si tenemos una lista única se puede separar usando: Apply Rule to Collection
 ## Deseq2
 Para realiar el análisis de expresión diferencial utilizaremos el programa Deseq2.
 Pasos:
-*“how” -> Select datasets per level
-.*En factor” -> “1: Factor” -> “Specify a factor name”: por ejemplo 'Treatment'
-.*En “Factor level” -> “1: Factor level” -> “Specify a factor level”: por ejemplo 'LB'
-..* Counts file(s) Acá hay que seleccionar los datasets
-.*En “2: Factor level” -> “Specify a factor level”: por ejemplo 'MG'
-..* Counts file(s) -> Acá hay que seleccionar los datasets
-*“Files have header?”: YES
-*“Output normalized counts table”: Yes
+* “how” -> Select datasets per level
+    *En factor” -> “1: Factor” -> “Specify a factor name”: por ejemplo 'Treatment'
+    *En “Factor level” -> “1: Factor level” -> “Specify a factor level”: por ejemplo 'LB'
+    * Counts file(s) Acá hay que seleccionar los datasets
+    *En “2: Factor level” -> “Specify a factor level”: por ejemplo 'MG'
+    * Counts file(s) -> Acá hay que seleccionar los datasets
+* “Files have header?”: YES
+* “Output normalized counts table”: Yes
 
 Como resultado obtendremos una tabla y varias figuras, incluyendo:
 * PCA (Principal component analysis) de las muestras: Sirve para analizar que tan similares son las muestras entre si. Es esperables que las diferentes condiciones estén separadas y las réplicas se encuentren cercanas entre si.
@@ -537,24 +552,24 @@ El BCV representa la variabilidad relativa que uno observaría si pudiera medir 
 * Histograma de p-values: distribución de p-values en la muestra.
 * MA−plot for Condition: LB vs MG: El gráfico de M.value -> logFC, versus la intensidad de la señal (recuentos normalizados). Con puntos rojos, los genes con un p-value significativo.
 
-##Heatmap2
+## Heatmap2
 Crear un heatmap para los genes. Podemos hacer un heatmap para tratar de ver genes con comportamiento similar en base a los recuentos normalizados. Este gráfico lo vamos a hacer solo para los genes con una diferencia estadisticamente significativa.
 
 
 1. Usando: Filter -> Filtrar los resultados de Deseq2 en base al adj-pvalue
-.*param-text “With following condition”: c7 < 0.01
-.*param-text “Number of header lines to skip”: 0
-..* Luego, podríamos quedarnos, por ejemplo, con los 100 genes con mayor diferencia significativa utilizando la función Sort. Esto no será necesario en nuestro caso por que tenemos menos de 100 genes expresados diferencialmente.
-.*Bajar la tabla filtrada y agregar los headers!
+    *param-text “With following condition”: c7 < 0.01
+    *param-text “Number of header lines to skip”: 0
+        * Luego, podríamos quedarnos, por ejemplo, con los 100 genes con mayor diferencia significativa utilizando la función Sort. Esto no será necesario en nuestro caso por que tenemos menos de 100 genes expresados diferencialmente.
+    *Bajar la tabla filtrada y agregar los headers!
 2. Ahora necesitamos cruzar los datos entre la tabla de recuentos normalizados y la tabla de resultados de Deseq2. Esto se puede hacer utilizando la función Join.
-.* Join user data: 'data_set1' using column c
-.* with user data: 'data_set2' using column c' 
+    * Join user data: 'data_set1' using column c
+    * with user data: 'data_set2' using column c' 
 3. Recortar los datos necesarios para el heatmap. Para ello utilizamos la función cut.
-.* Cut columns -> columnas separadas por coma: c1,c2,c3
-.* Delimited by -> delimitador de campos: tab
+    * Cut columns -> columnas separadas por coma: c1,c2,c3
+    * Delimited by -> delimitador de campos: tab
 4. Heatmap2
-.* Coloring groups -> blue->white->red
-.* Data scaling -> by row
+    * Coloring groups -> blue->white->red
+    * Data scaling -> by row
 
 
 
@@ -563,60 +578,6 @@ Crear un heatmap para los genes. Podemos hacer un heatmap para tratar de ver gen
 ## Degust -> Web
 Para correr el servidor Degust, deberán bajar la tabla generada por el Deseq2.
 Esta herramienta online genera una serie de figuras de interés.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-links útiles
-
-http://manuals.bioinformatics.ucr.edu/workshops/dec-12-16-2013
-https://galaxyproject.org/learn/
-
-> < = | ~ ¬ « » ░ ▒ ▓ │ ┤ ╣ ║ ╗ ╝ ┐└  ┴ ┬ ├ ─ ┼ ╚ ╔ ╩ ╦ ╠ ═ ╬ ┘ ┌ █ ▄
-¦ ¯ ≡ ‗ ■ ┌ ┘ ─ ├ ┤ _ ┴ ┬ ┼
-
-*cosas para instalar
-STAR (idem HISAT)
-htseq_count
-DeSeq2
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
