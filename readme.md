@@ -2,12 +2,20 @@ MicroOmics
 ==========
 ![alt text](https://github.com/maurijlozano/MICROOMICS/blob/master/dockerweb.png)
 
-# Objetivos:
+# Índice
+1. [Información del curso](#id1)
+2. [Trabajo Práctico](#id2)
+3. [Día 1](#id3)
+4. [Día 2](#id4)
+
+# Información del curso <a name="id1"></a>
+
+## Objetivos:
 Que los alumnos logren:
 - Adquirir habilidades para el desarrollo y análisis de resultados ómicos en el área de la microbiología
 - Generar espacios de análisis de casos y discusión de resultados de trabajos científicos publicados de la temática
 
-# Programa resumido
+## Programa resumido
 Las actividades del curso constarán de clases teóricas, seminarios y un trabajo práctico.
 Día 1: Genómica (8hs).Introducción del tema y estudio de casos.
 Día 2: Transcriptómica (8hs). Introducción del tema y estudio de casos.
@@ -19,10 +27,8 @@ Día 5: Mañana: Presentación de seminarios y proyectos de investigación de lo
 - **Transcriptómica**: Antecedentes, otros métodos para la evaluación diferencial de la expresión. RNAseq. Procesamiento, análisis y visualización de los resultados. RNAseq de reguladores transcripcionales. Búsqueda de reguladores, mutagenesis y transcriptómica. Búsqueda de determinantes involucrados en la comunicación rizobio-leguminosa durante la simbiosis mediante Dual-RNAseq. Redes regulatorias de la expresión de flagelos en Bradyrhizobium diazoefficiens. Caracterización molecular de los mecanismos que regulan la transferencia conjugativa de plásmidos en rizobios. 
 - **Proteómica**: Teoría e historia. Aplicaciones. Métodos. DIGE / Orbitrap. Análisis de los datos cuantitativos.
 - **Metabolómica**: Definiciones. Aproximaciones experimentales para la determinación de metabolitos celulares. Visualización de redes metabólicas. Respuesta severa en Bradyrhizobium diazoefficiens y su relación con la simbiosis en soja. Aproximaciones ómicas. 
-- **Trabajo práctico**: Manipulación de secuencias. Bases de datos (Uniprot/Pfam). Ensamblaje de un genoma y análisis comparativo del mismo. Mapeo de lecturas de RNAseq, análisis diferencial y visualización de resultados.
 
-
-# Información
+## **Trabajo práctico**: Manipulación de secuencias. Ensamblaje de un genoma y análisis comparativo del mismo. Mapeo de lecturas de RNAseq, análisis diferencial y visualización de resultados.
 
 La parte práctica del curso la realizaremos utilizando una instanica local de Galaxy, por medio de Docker.
 Para instalar docker en sus comutadoras personales (ya estará instalado para el curso) pueden seguir las instrucciones provistas en el enlace siguiente [Instalación de Docker](https://github.com/maurijlozano/MICROOMICS/blob/master/Instalacion_docker_galaxy.md)
@@ -30,7 +36,7 @@ Para instalar docker en sus comutadoras personales (ya estará instalado para el
 Adicionalmente, encontrará información sobre la imagen de docker utilizada en el curso en el enlace siguiente [MicroOmics](https://github.com/maurijlozano/MICROOMICS/blob/master/Instalacion_docker_galaxy.md)
 
 
-Trabajo Práctico
+Trabajo Práctico <a name="id2"></a>
 ================
 
 El objetivo de los experimentos de secuenciación es obtener la sucesión de bases nucleotídicas (secuencia) que componen el ADN o ARN. Como ya se vio en las clases teóricas existen diferentes métodos de secuenciación, que a partir de una muestra de ADN/ARN (biblioteca/library) obtienen una colección de fragmentos de secuencia, usualmente cortos (aunque con los años se ha ido aumentando el largo de los mismos) normalmente llamados 'lecturas' o **reads**.
@@ -60,17 +66,19 @@ Dicho esto, como **objetivo del trabajo práctico** nos planteamos los siguiente
     * Realizar el análisis de expresión diferencial
 
 
-Día 1
------
+Día 1 - Obtención de la secuencia genómica de *Streptococcus pyogenes* FDAARGOS_190 <a name="id3"></a>
+-----------------------------------------------------------------------------------
+Las secuencias para este trabajo práctico se obtuvieron de [Unicycler](https://github.com/rrwick/Unicycler/tree/master/sample_data) y corresponden a secuencias *Streptococcus pyogenes* de la base de datos FDA-ARGOS. [Streptococcus pyogenes strain FDAARGOS_190](https://www.ncbi.nlm.nih.gov/nuccore/NZ_NBTO02000001.1). Esta cepa posee solo un cromosoma lineal de 1.763.879 bp. El genoma de *S. pyogenes* es relativamente facil de ensamblar, es chico y posee pocas secuencias repetitivas (5 copias del operon RNA y 6 copias de IS1548). En este caso contamos con 2 archivos fastq.gz obtenidos por secuenciación con la plataforma Illuminaque, que corresponen a las lecturas paired-end. Además tenemos lecturas generadas con la plataforma Oxford Nanopore.
 
+# Iniciar Galaxy docker
+El prmier paso será iniciar el Docker de Galaxy en un puerto local, y montando la carpeta de trabajo. Dado que las instacias de Docker son de solo lectura, es necesario exportar los datos en una carpeta compartida.
 
-# Correr Galaxy docker
 `docker run -d -p 8080:80 -v ~/galaxy_storage/:/export/ bgruening/galaxy-stable`
 
 En este comando, el texto siguiente *"~/galaxy_storage/"* debe ser reemplazado por la ruta en la cual se guardarán los archivos.
 
 
-Para la realización del TP, además de esta guía se pueden utilizar la página [Galaxy Training!](https://galaxyproject.github.io/training-material/topics/introduction/tutorials/galaxy-intro-ngs-data-managment/tutorial.html) 
+Para la realización del TP, además de esta guía se pueden mirar los tutoriales de la página [Galaxy Training!](https://galaxyproject.github.io/training-material/topics/introduction/tutorials/galaxy-intro-ngs-data-managment/tutorial.html) 
 
 
 # Crear historia
@@ -441,7 +449,7 @@ Los tags mas usados son los siguientes:
 * LB, Identidad de la preparación de ADN. Es utilizado por MarkDuplicates para determinar que grupos podrían tener duplicados, en el caso en que se hallan usado muchas calles. 
 
 
-Día 2: RNAseq
+Día 2: RNAseq <a name="id4"></a>
 -------------
 
 # Introducción
