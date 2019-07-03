@@ -31,9 +31,9 @@ Día 5: Mañana: Presentación de seminarios y proyectos de investigación de lo
 ## **Trabajo práctico**: Manipulación de secuencias. Ensamblaje de un genoma y análisis comparativo del mismo. Mapeo de lecturas de RNAseq, análisis diferencial y visualización de resultados.
 
 La parte práctica del curso la realizaremos utilizando una instanica local de Galaxy, por medio de Docker.
-Para instalar docker en sus comutadoras personales (ya estará instalado para el curso) pueden seguir las instrucciones provistas en el enlace siguiente [Instalación de Docker](https://github.com/maurijlozano/MICROOMICS/blob/master/Instalacion_docker_galaxy.md)
+Para instalar docker en sus comutadoras personales (ya estará instalado para el curso) pueden seguir las instrucciones provistas en el enlace siguiente [Instalación de Docker](https://github.com/maurijlozano/MICROOMICS/blob/master/Instalacion_docker.md)
 
-Adicionalmente, encontrará información sobre la imagen de docker utilizada en el curso en el enlace siguiente [MicroOmics](https://github.com/maurijlozano/MICROOMICS/blob/master/Instalacion_docker_galaxy.md)
+Adicionalmente, encontrará información sobre la imagen de docker utilizada en el curso en el enlace siguiente [MicroOmics](https://github.com/maurijlozano/MICROOMICS/blob/master/Microomics_docker/Info_docker_Image.md)
 
 
 Trabajo Práctico <a name="id2"></a>
@@ -68,7 +68,11 @@ Dicho esto, como **objetivo del trabajo práctico** nos planteamos los siguiente
 
 Día 1 - Obtención de la secuencia genómica de *Streptococcus pyogenes* FDAARGOS_190 <a name="id3"></a>
 -----------------------------------------------------------------------------------
-Las secuencias para este trabajo práctico se obtuvieron de [Unicycler](https://github.com/rrwick/Unicycler/tree/master/sample_data) y corresponden a secuencias *Streptococcus pyogenes* de la base de datos FDA-ARGOS. [Streptococcus pyogenes strain FDAARGOS_190](https://www.ncbi.nlm.nih.gov/nuccore/NZ_NBTO02000001.1). Esta cepa posee solo un cromosoma lineal de 1.763.879 bp. El genoma de *S. pyogenes* es relativamente facil de ensamblar, es chico y posee pocas secuencias repetitivas (5 copias del operon RNA y 6 copias de IS1548). En este caso contamos con 2 archivos fastq.gz obtenidos por secuenciación con la plataforma Illuminaque, que corresponen a las lecturas paired-end. Además tenemos lecturas generadas con la plataforma Oxford Nanopore.
+Las secuencias para este trabajo práctico se obtuvieron de [Unicycler](https://github.com/rrwick/Unicycler/tree/master/sample_data) y corresponden a secuencias *Streptococcus pyogenes* de la base de datos FDA-ARGOS. [Streptococcus pyogenes strain FDAARGOS_190](https://www.ncbi.nlm.nih.gov/nuccore/NZ_NBTO02000001.1). Esta cepa posee solo un cromosoma lineal de 1.763.879 bp. El genoma de *S. pyogenes* es relativamente facil de ensamblar, es chico y posee pocas secuencias repetitivas (5 copias del operon RNA y 6 copias de IS1548). En este caso contamos con 2 archivos fastq.gz obtenidos por secuenciación con la plataforma Illumina, que corresponen a las lecturas paired-end. Además tenemos lecturas largas generadas con la plataforma Oxford Nanopore.
+
+**sets de datos alternativos:**
+* Plásmidos de Shigella - Short/long reads, paired end.
+* mini genoma artificial de Staphylococcus aureus. Illumina paired-end reads, largo de 150 bases.
 
 # Iniciar Galaxy docker
 El prmier paso será iniciar el Docker de Galaxy en un puerto local, y montando la carpeta de trabajo. Dado que las instacias de Docker son de solo lectura, es necesario exportar los datos en una carpeta compartida.
