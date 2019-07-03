@@ -234,6 +234,10 @@ tools:
   owner: iuc
   tool_panel_section_label: "RNA-Seq"
   
+- name: htseq_count
+  owner: lparsons
+  tool_panel_section_label: "RNA-Seq"  
+  
 - name: deseq2
   owner: iuc
   tool_panel_section_label: "RNA-Seq"
