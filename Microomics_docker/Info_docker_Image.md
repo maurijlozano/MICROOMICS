@@ -2,7 +2,7 @@ Aplicaciones Instaladas
 ========================
 La imagen de galaxy bajada del repositorio de Docker fue modificada mediante la instalación local de diferentes herramientas. En la lista siguiete figuran las herramientas más utilizadas, y entre corchetes aquellas que fueron instaladas para la realización del trabajo práctico.
 
-### Programas normalmente utilizados [Instalado]:
+### Programas Instalados:
 1. Quality control
     * FastQC 
     * MultiQC
@@ -19,11 +19,11 @@ La imagen de galaxy bajada del repositorio de Docker fue modificada mediante la 
 5. SAM TOOLs
 
 6. Assembly
-    * Create assemblies with Unicycler -SPAdes- **[Instalado]**
-    * Quast Genome assembly Quality **[Instalado]**
+    * Create assemblies with Unicycler -SPAdes-
+    * Quast Genome assembly Quality 
 
 7. ANNOTATION
-    * Prokka: Prokaryotic genome annotation **[Instalado]**
+    * Prokka: Prokaryotic genome annotation
 
 8. Variant Calling
     * Snippy
