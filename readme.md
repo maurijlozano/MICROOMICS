@@ -321,7 +321,6 @@ El procesamiento en términos generales implica:
     * Es importante tener en cuanta que los valores normalizados anteriormente no deben compararse entre condiciones para determinar el el grado de expresión diferencial. Con este objetivo existen herramientas específicas que calcualrán la magnitud del cambio y su significancia estadística, teniendo en cuenta, si existe, la información de las réplicas biológicas.
     * Las mejores aplicaciones para realizar el análisis diferencial son edgeR, DESeq/DESeq2, y limma-voom.
 
-
 # Generar las colecciones
 En este caso nos va a interesar generar dos colecciones, una para las lecturas correspondientes a E. coli* crecida en medio LB y otra para las correspondientes a *E. coli* crecidas en medio MG.
 Adicionalmente, podemos crear una colección con todas las lecturas para hacer el control de calidad.
@@ -333,8 +332,7 @@ Igualmente que en el caso anterior, es importante verificar la calidad de las le
 * Analizar los datos
 
 # Genoma de referencia
-El genoma de referencia es el de *E. coli* K12. Acá es mecesario convertir el archivo .gtf a .gff.
-Para ello en la historia seleccionar el archivo, clickear en el icono 'edit' y seleccionar la opción convertir.
+El genoma de referencia es el de *E. coli* K12. Además de la secuencia en formato fasta tenemos las anotaciones de transcriptos en formato gtf. Para la visualización con JBROWSE utilizaremos el formato GFF, por lo que será mecesario convertir el archivo .gtf a .gff. Para ello utilizaremos la aplicación GTF2GFF.
 
 # Mapeo de secuencias en contra un genoma de referencia
 El mapeo es el proceso mediante el cual las lecturas se alinean a un genoma de referencia. Los programas para realziar el mapeo toman como input un genoma de referencia y los sets de lecturas. El objetivo es alinear cada lectura en los archivos fastq en el genoma de referencia, permitiendo algunos errores (mismatches), indels (deleciones o inserciones) y el cortado de algunos fragmentos cortos en los extremos de las lecturas-
@@ -501,16 +499,8 @@ Mirando los resultados, tratar de determinar si nuestras secuencias vienen de un
 Para cargar genomas de referencia en IGV, los mismos tienen que estar indexados. Para generar el índice hay que abrir el fasta de referencia y entrar en la opción de edición (click en el lápiz). Dentro, elegir convertir, y seleccionar fai.
 Se puede despues abrir el IGV online y cargar los archivos de la referencia (fas,fai) y del alineamiento (bam,bai).
 
-# Read Groups
-Los read groups son útiles para combinar múltiples alinemientos en un solo archivo, sin perder la información acerca de la muestra de la cual provienen. Los read groups se agregan al header del archivo SAM, con @RG seguido de los tags correspondientes. Si hay más de un RG, entonces habrá varias lineas con @RG.
-Los tags mas usados son los siguientes:
-* ID, requerido, Id del grupo, en general corresponde a la celda del Illumina, el número y nombre de la calle. Las lecturas en un mismo read group, se asumen de la misma corrida y por ende tienen el mismo error. Este tag tiene que coincidir con el tag RG, de las entradas del archivo BAM.
-* SM, requerido, Id de la Muestra. Todas las lecturas con el mismo SM, corresponden a la misma muestra.
-* PL, tag correspondiente a la tecnología de secuenciación utilizada para generar las lecturas.
-* LB, Identidad de la preparación de ADN. Es utilizado por MarkDuplicates para determinar que grupos podrían tener duplicados, en el caso en que se hallan usado muchas calles. 
-
 # Recuento y análisis de expresión diferencial de secuencias que mapean en cada transcripto
-Utilizaremos el programa featurecounts
+Utilizaremos el programa featurecounts (o htseq-count)
 En opciones hay que elegir:
 * Alignment file -> Alineamiento hecho con Bowtie2 (SAM/BAM)
 * Specify strand information -> Stranded (Forward)
@@ -566,13 +556,19 @@ Crear un heatmap para los genes. Podemos hacer un heatmap para tratar de ver gen
     * Coloring groups -> blue->white->red
     * Data scaling -> by row
 
-
 ## Otros analisis
 ## Degust -> Web
 Para correr el servidor Degust, deberán bajar la tabla generada por el Deseq2.
 Esta herramienta online genera una serie de figuras de interés.
 
 
+# Extra -> Read Groups
+Los read groups son útiles para combinar múltiples alinemientos en un solo archivo, sin perder la información acerca de la muestra de la cual provienen. Los read groups se agregan al header del archivo SAM, con @RG seguido de los tags correspondientes. Si hay más de un RG, entonces habrá varias lineas con @RG.
+Los tags mas usados son los siguientes:
+* ID, requerido, Id del grupo, en general corresponde a la celda del Illumina, el número y nombre de la calle. Las lecturas en un mismo read group, se asumen de la misma corrida y por ende tienen el mismo error. Este tag tiene que coincidir con el tag RG, de las entradas del archivo BAM.
+* SM, requerido, Id de la Muestra. Todas las lecturas con el mismo SM, corresponden a la misma muestra.
+* PL, tag correspondiente a la tecnología de secuenciación utilizada para generar las lecturas.
+* LB, Identidad de la preparación de ADN. Es utilizado por MarkDuplicates para determinar que grupos podrían tener duplicados, en el caso en que se hallan usado muchas calles. 
 
 
  
