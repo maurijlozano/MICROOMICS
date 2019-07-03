@@ -11,6 +11,6 @@ ADD microomics.yml $GALAXY_ROOT/tools.yaml
 RUN install-tools $GALAXY_ROOT/tools.yaml && \
     /tool_deps/_conda/bin/conda clean --all --yes
 
-# Container Style for Sniplay/Southgreen
+# Container Style
 ADD welcome_image.png $GALAXY_CONFIG_DIR/web/welcome_image.png
 ADD welcome.html $GALAXY_CONFIG_DIR/web/welcome.html
