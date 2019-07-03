@@ -41,27 +41,25 @@ Trabajo Práctico <a name="id2"></a>
 
 El objetivo de los experimentos de secuenciación es obtener la sucesión de bases nucleotídicas (secuencia) que componen el ADN o ARN. Como ya se vio en las clases teóricas existen diferentes métodos de secuenciación, que a partir de una muestra de ADN/ARN (biblioteca/library) obtienen una colección de fragmentos de secuencia, usualmente cortos (aunque con los años se ha ido aumentando el largo de los mismos) normalmente llamados 'lecturas' o **reads**.
 Los métodos modernos de secuenciación obtienen usualmente números masivos de lecturas por cada experimento. Dado que los métodos de secuenciación no son perfectos, las lecturas generalmente tienen un error asociado, como por ejemplo, la probabilidad de haber asignado un nucleótido incorrecto.
+
 Estas secuencias pueden ser obtenidas a partir de muestras de ADN o ARN con diferentes objetivos.
- 
 * ADN: para reconstruir la secuencia genómica de un organismo, para caracterizar la diversidad de un ambiente (secuenciación de 16S rRNA, secuencias ITS, etc) o para caracterizar el metagenoma de un ambiente determinado.
 * ARN: para reconstruir el transcriptoma de un organismo, para estudiar la expresión diferencial de genes o para estudiar el metatranscriptoma asociado a un ambiente determinado.
 
 Dicho esto, como **objetivo del trabajo práctico** nos planteamos los siguientes puntos:
 
-1. Día 1: A partir de datos de un experimento de secuenciación:
+1. **Día 1**: A partir de datos de un experimento de secuenciación:
     * Analizar la calidad de las secuencias obtenidas
     * Realizar el trimming y filtrado de las secuencias
-    * Mapear las secuencias a un genoma de referencia
-        * Obtener el genoma y realizar la búsqueda de variantes
     * Realizar el ensamblado *de novo* de las secuencias
         * Analizar la calidad de los resultados
     * Realizar la anotación del genoma
-
-2. Día 2: A partir de datos de un experimento de RNAseq:
+    * Mapear las secuencias a un genoma de referencia y realizar la búsqueda de variantes
+        
+2. **Día 2**: A partir de datos de un experimento de RNAseq:
     * Analizar la calidad de las secuencias obtenidas
     * Realizar el trimming y filtrado de las secuencias
     * Mapear las secuencias a un genoma de referencia
-    * Reconstruir el transcriptoma
     * Realizar el recuento de secuencias para cada transcripto
     * Realizar el análisis de expresión diferencial
 
@@ -70,14 +68,14 @@ Día 1 - Obtención de la secuencia genómica de *Streptococcus pyogenes* FDAARG
 -----------------------------------------------------------------------------------
 Las secuencias para este trabajo práctico se obtuvieron de [Unicycler](https://github.com/rrwick/Unicycler/tree/master/sample_data) y corresponden a secuencias *Streptococcus pyogenes* de la base de datos FDA-ARGOS. [Streptococcus pyogenes strain FDAARGOS_190](https://www.ncbi.nlm.nih.gov/nuccore/NZ_NBTO02000001.1). Esta cepa posee solo un cromosoma lineal de 1.763.879 bp. El genoma de *S. pyogenes* es relativamente facil de ensamblar, es chico y posee pocas secuencias repetitivas (5 copias del operon RNA y 6 copias de IS1548). En este caso contamos con 2 archivos fastq.gz obtenidos por secuenciación con la plataforma Illumina, que corresponen a las lecturas paired-end. Además tenemos lecturas largas generadas con la plataforma Oxford Nanopore.
 
-**sets de datos alternativos:**
+**sets de datos alternativos:** Set de datos artificiales y mas chicos que pueden utilizarse para correr los análisis en menor tiempo.
 * Plásmidos de Shigella - Short/long reads, paired end.
 * mini genoma artificial de Staphylococcus aureus. Illumina paired-end reads, largo de 150 bases.
 
 # Iniciar Galaxy docker
 El prmier paso será iniciar el Docker de Galaxy en un puerto local, y montando la carpeta de trabajo. Dado que las instacias de Docker son de solo lectura, es necesario exportar los datos en una carpeta compartida.
 
-`docker run -d -p 8080:80 -v ~/galaxy_storage/:/export/ bgruening/galaxy-stable`
+`docker run -d -p 8080:80 -v ~/galaxy_storage/:/export/ maurijlozano/microomics`
 
 En este comando, el texto siguiente *"~/galaxy_storage/"* debe ser reemplazado por la ruta en la cual se guardarán los archivos.
 
@@ -236,7 +234,7 @@ El procesamiento típico de las secuencias incluye:
 1. Filtrado/enmascarado/recortado de secuencias
 Para realizar el filtrado/recortado de las secuencias se pueden utilizar varios programas: Trimmomatic, Trim Galore, Cutadapt y otros.
 
-### Trimmomatic! **[Instalado]**
+### Trimmomatic
 ILLUMINACLIP: remueve adaptadores y secuencias específicas de illumina.
 SLIDINGWINDOW: realiza el recorte por 'sliding window', cortando una vez que la calidad promedio de la ventana cayó por debajo de un determinado valor.
 MINLEN: elimina la lectura si tiene un largo menor al mínimo.
@@ -249,7 +247,12 @@ MAXINFO: corte adaptativo, maximiza el valor de cada lectura balanceando el larg
 
 Para secuencias pareadas Trimmomatic devuelve dos resultados, uno en el que ambos pares están presentes, y un segundo resultado conteniendo las secuencias no pareadas.
 
-### otra opción: Cutadapt
+### otra ocpción -> Trim Galore!
+* Seleccionar ->  “Is this paired- or single-end”: Paired-end
+* Seleccionar -> param-file “Reads in FASTQ format #1”: 
+* Seleccionar -> param-file “Reads in FASTQ format #2”: 
+
+### otra opción: Cutadapt (No instalado)
     * Utilizar Cutadapt con los siguientes parámetros
         * “Single-end or Paired-end reads?”: Paired-end
         * param-file “FASTQ/A file #1”: reads_1 (Input dataset)
@@ -268,22 +271,79 @@ Para secuencias pareadas Trimmomatic devuelve dos resultados, uno en el que ambo
 [Mirar como funciona el algoritmo de Cutadapt!](https://galaxyproject.github.io/training-material/topics/sequence-analysis/tutorials/quality-control/tutorial.html)
  
 
-### otra ocpción -> Trim Galore!
-* Seleccionar ->  “Is this paired- or single-end”: Paired-end
-* Seleccionar -> param-file “Reads in FASTQ format #1”: 
-* Seleccionar -> param-file “Reads in FASTQ format #2”: 
+Día 2: RNAseq <a name="id4"></a>
+-------------
 
+# Introducción
+[Referencia](https://galaxyproject.org/tutorials/rb_rnaseq/)
+[Referencia2](https://galaxy-au-training.github.io/tutorials/modules/dge/#upload-files-to-galaxy)
+
+En este caso, las lecturas que utilizaremos corresponden a *E. coli*, creciendo en dos medios de cultivo diferentes. El set de datos, es una versión reducida al 1% para acortar los tiempos de cálculo, tomada de [Galaxy Australia Training - RNA-Seq: Bacteria - Autor: Syme, Anna](https://doi.org/10.5281/zenodo.1311269). 
+
+
+Existen dos métodos principales, los basados en genomas de referencia, o los independientes de genoma de referencia. En este último caso se ensamblan las lecturas en transcriptos usando métodos *de novo*.
+
+En lineas muy generales el protocolo experimental cumple con los siguientes pasos:
+1. Purificación de RNA
+2. Transcripción reversa -> Generación del cDNA
+3. Síntesis de la segunda cadena utilizando una DNA polimerasa
+4. Preparación de una biblioteca de secuenciamiento
+
+Las etapas anteriores omiten muchas consideraciones experimentales que en algunos casos son necesarios. Sin embargo, entre estos hay dos que describiremos por su importancia:
+
+## Síntesis de la primera cadena.
+Como la transcriptasa reversa requiere un oligonucleótido que actúe como cebador, según como se elige este cebador tendremos diferentes aproximaciones experimentales.
+Por ejemplo, para Eucariotas es común utilizar como cebador oligo-dT, ya que los mRNAs procesados están poliadenilados.
+Otra estrategia muy utilizada es utilizar oligonucleótidos de secuencia aleatoria (random priming) que permitirán la transcripción reversa en múltiples sitios internos.
+
+## RNAseq específico de hebra (Strand-specific)
+Los RNAs son de una sola cadena y por consiguiente tienen polaridad. En los experimentos mas típicos de RNAseq la polaridad se pierde ya que se construye una biblioteca a partir del DNA doble cadena. Existen diversos métodos para generar una biblioteca strand-specific, que involucran en general la ligación de adaptadores en los extremos del RNA (los más comunes son Illumina TrueSeq RNAseq kits and dUTP tagging).
+
+Dependiendo del método utilizado, tenemos que tener cuidado de como interpretar los datos. En general una inspección visual de las lecturas mapeadas puede darnos información sobre el tipo de biblioteca que tenemos.
+(En rojo -> lecturas mapeadas directas)
+(En azul -> lecturas mapeadas en RC)
+ 
+# Ya tenemos nuestras secuencias. y ahora?
+El procesamiento en términos generales implica:
+1. Determinación de calidad de las lecturas
+2. Filtrado y cortado de adaptadores
+3. Mapeo contra el genoma de referencia 
+    * Acá, tenemos que tener en cuanta si el organismo en estudio es pro- o eucariota. En el caso de organismos eucariotas tendremos que tener en cuenta el que as secuencias solo mapearán en los exones, y algunas de ellas atravesarán de un exón a otro. En estos casos se utilizan *spliced mappers* como TopHat, HiSat y STAR.
+4. Reconstrucción del transcriptoma
+    * En esta etapa, las lecturas mapeadas al genoma y con las uniones de exones, son utilizadas para construir modelos de transcriptoma (Splicing alternativos). Existen distintas herramientas, una de las más utilizadas es cufflinks (y ahora del mismo grupo Stringtie). Nuevamente, esto no será necesario para el análisis del transcriptoma de procariotas.
+5. La siguiente etapa es la cuantificación de los transcriptos. 
+    * Esto implica asignar las lecturas a los transcriptos. En este punto, Cufflinks (Stringtie) ya tienen la información sobre que lecturas mapean contra cada transcripto, por lo que solo resta contarlas! Stringtie, adicionalmente realiza la cuantificación.
+    * Existen otras herramientas que mapean directamente las lecturas al transcriptoma, asumiendo que existe un transcriptoma de buena calidad para el organismo en cuestión (en general se usa en humanos o ratón; Sailfish, Kallisto, Salmon)
+    * El recuento de las lecturas asociadas a cada transcripto en general es una muy mala aproximación a la cantidad de transcripto, esto se debe distintos factores, principalmente el largo del transcripto. Por ende, los recuentos deben ser normalizados. Existen distintos métodos de normalización:
+    * Normalización dentro de una misma muestras (RPKM, FPKM, TPM, rlog)
+    * Normalización entre muestras
+6. Análisis de expresión diferencial
+    * Es importante tener en cuanta que los valores normalizados anteriormente no deben compararse entre condiciones para determinar el el grado de expresión diferencial. Con este objetivo existen herramientas específicas que calcualrán la magnitud del cambio y su significancia estadística, teniendo en cuenta, si existe, la información de las réplicas biológicas.
+    * Las mejores aplicaciones para realizar el análisis diferencial son edgeR, DESeq/DESeq2, y limma-voom.
+
+
+# Generar las colecciones
+En este caso nos va a interesar generar dos colecciones, una para las lecturas correspondientes a E. coli* crecida en medio LB y otra para las correspondientes a *E. coli* crecidas en medio MG.
+Adicionalmente, podemos crear una colección con todas las lecturas para hacer el control de calidad.
+
+# Determinar la calidad de las lecturas - FastQC / filtrados y recortes (Trimmomatic)
+Igualmente que en el caso anterior, es importante verificar la calidad de las lecturas obtenidas y realizar los filtrados y recortes necesarios.
+* Correr el FastQC en la colección con todas las lecturas
+* Correr el MultiQC con los resultados de FastQC
+* Analizar los datos
+
+# Genoma de referencia
+El genoma de referencia es el de *E. coli* K12. Acá es mecesario convertir el archivo .gtf a .gff.
+Para ello en la historia seleccionar el archivo, clickear en el icono 'edit' y seleccionar la opción convertir.
 
 # Mapeo de secuencias en contra un genoma de referencia
 El mapeo es el proceso mediante el cual las lecturas se alinean a un genoma de referencia. Los programas para realziar el mapeo toman como input un genoma de referencia y los sets de lecturas. El objetivo es alinear cada lectura en los archivos fastq en el genoma de referencia, permitiendo algunos errores (mismatches), indels (deleciones o inserciones) y el cortado de algunos fragmentos cortos en los extremos de las lecturas-
 En la actualidad hay mas de 60 programas diferentes para realizar el mapeo, y el número sigue creciendo. En el trabajo práctico utilizaremos algunos de los más comunes como el Bowtie2, o el BWA.
 
-### Crear Genoma de referencia
-1. Lo primero es normalizar el archivo fasta ->  "NormalizeFasta with the options to wrap sequence lines at 80 bases and to trim the title line at the first whitespace"
- 
-2. Dirigirse a la pestaña User y seleccionar *Custom Build*
+## Mapeo de las lecturas obtenidas
+Como las lecturas que tenemos provienen de un estudio de RNAseq de procariotas, no es necesario que realicemos un mapeo que tenga en cuenta splicing. Por ello realizaremos el mapeo con Bowtie2. **Recordar seleccionar la opción para que reporte la estadística del mapeo**. Adicionalmente, no será necesario realizar la reconstrucción del transcriptoma.
 
-## Bowtie2 **[Instalado]**
+## Bowtie2
 Para ejecutar el mapeador Bowtie2, necesitamos el genoma de referencia contra el cual alinear las lecturas. Para ello debemos cargar los archivos fasta en la historia. Es recomendable además agregarlo a un *custom build*, que es la forma que usan la mayoría de las aplicaciones para seleccionar genomas de referencia.
 
 El programa Bowtie2 toma los siguientes argumentos:
@@ -384,12 +444,8 @@ Donde type puede ser de las siguientes clases: A - Character, i - Integer, f - F
 La etiqueta varía según el ensamblador, pueden ser: AS (alignment score), BC (Barcode sequence), HI (cual es la primer posición de la lectura que alinea), NH (Número de alineamientos para la secuencia), NM (distancia de la secuencia a la referencia, es 0 si son idénticas), MD (Posición exacta de los mismatches) y RG (Read Group).
 Los Tags comenzando con X, Y y Z no están estandarizadas. Por ejemplo XS, es usada por TopHat para indicar la hebra, mientras que el mismo tag es usado por BWA y Bowtie2 para guardar el score del mejor alinemiento, en casos de lecturas que mapean en sitios múltiples.
 
-### Otra opción BWA / BWA-MEM
+### Otra opción BWA / BWA-MEM (No instalado)
 Otro mapeador altamente utilizado es BWA. 
-
-
-
-
  
 ### MPileup
 samtools mpileup -> para generar la secuencia consenso del secuenciamiento!
@@ -434,15 +490,16 @@ This is an optional column. If present, the ASCII value of the character minus 3
 ###Convert, Merge, Randomize BAM tools. 
 Convert to fasta!
 
+## Para analizar los resultados de todas las lecturas utilizar MultiQC.
+Los resultadosd el mapeo se pueden visualizar utilizando MultiQC, siempre y cuando se haya seleccionado que Bowtie2 genere el archivo de estadística.
 
 ## Visualizar en JBrowse
-
+Para visualizar las secuencias mapeadas sobre el genoma de referencia se puede utilizar el progrma JBROWSE (entre otros). Acá hay que agregar las pistas del genoma con su anotación y de los archivos SAM del mapeo.
+Mirando los resultados, tratar de determinar si nuestras secuencias vienen de una biblioteca 'stranded'.
 
 ### Otra opción IGV
 Para cargar genomas de referencia en IGV, los mismos tienen que estar indexados. Para generar el índice hay que abrir el fasta de referencia y entrar en la opción de edición (click en el lápiz). Dentro, elegir convertir, y seleccionar fai.
 Se puede despues abrir el IGV online y cargar los archivos de la referencia (fas,fai) y del alineamiento (bam,bai).
- 
-
 
 # Read Groups
 Los read groups son útiles para combinar múltiples alinemientos en un solo archivo, sin perder la información acerca de la muestra de la cual provienen. Los read groups se agregan al header del archivo SAM, con @RG seguido de los tags correspondientes. Si hay más de un RG, entonces habrá varias lineas con @RG.
@@ -452,81 +509,6 @@ Los tags mas usados son los siguientes:
 * PL, tag correspondiente a la tecnología de secuenciación utilizada para generar las lecturas.
 * LB, Identidad de la preparación de ADN. Es utilizado por MarkDuplicates para determinar que grupos podrían tener duplicados, en el caso en que se hallan usado muchas calles. 
 
-
-Día 2: RNAseq <a name="id4"></a>
--------------
-
-# Introducción
-[Referencia](https://galaxyproject.org/tutorials/rb_rnaseq/)
-[Referencia2](https://galaxy-au-training.github.io/tutorials/modules/dge/#upload-files-to-galaxy)
-
-En este caso, las lecturas que utilizaremos corresponden a *E. coli*, creciendo en dos medios de cultivo diferentes. El set de datos, es una versión reducida al 1% para acortar los tiempos de cálculo, tomada de [Galaxy Australia Training - RNA-Seq: Bacteria - Autor: Syme, Anna](https://doi.org/10.5281/zenodo.1311269). 
-
-
-Existen dos métodos principales, los basados en genomas de referencia, o los independientes de genoma de referencia. En este último caso se ensamblan las lecturas en transcriptos usando métodos *de novo*.
-
-En lineas muy generales el protocolo experimental cumple con los siguientes pasos:
-1. Purificación de RNA
-2. Transcripción reversa -> Generación del cDNA
-3. Síntesis de la segunda cadena utilizando una DNA polimerasa
-4. Preparación de una biblioteca de secuenciamiento
-
-Las etapas anteriores omiten muchas consideraciones experimentales que en algunos casos son necesarios. Sin embargo, entre estos hay dos que describiremos por su importancia:
-
-## Síntesis de la primera cadena.
-Como la transcriptasa reversa requiere un oligonucleótido que actúe como cebador, según como se elige este cebador tendremos diferentes aproximaciones experimentales.
-Por ejemplo, para Eucariotas es común utilizar como cebador oligo-dT, ya que los mRNAs procesados están poliadenilados.
-Otra estrategia muy utilizada es utilizar oligonucleótidos de secuencia aleatoria (random priming) que permitirán la transcripción reversa en múltiples sitios internos.
-
-## RNAseq específico de hebra (Strand-specific)
-Los RNAs son de una sola cadena y por consiguiente tienen polaridad. En los experimentos mas típicos de RNAseq la polaridad se pierde ya que se construye una biblioteca a partir del DNA doble cadena. Existen diversos métodos para generar una biblioteca strand-specific, que involucran en general la ligación de adaptadores en los extremos del RNA (los más comunes son Illumina TrueSeq RNAseq kits and dUTP tagging).
-
-Dependiendo del método utilizado, tenemos que tener cuidado de como interpretar los datos. En general una inspección visual de las lecturas mapeadas puede darnos información sobre el tipo de biblioteca que tenemos.
-(En rojo -> lecturas mapeadas directas)
-(En azul -> lecturas mapeadas en RC)
- 
-# Ya tenemos nuestras secuencias. y ahora?
-El procesamiento en términos generales implica:
-1. Determinación de calidad de las lecturas
-2. Filtrado y cortado de adaptadores
-3. Mapeo contra el genoma de referencia 
-    * Acá, tenemos que tener en cuanta si el organismo en estudio es pro- o eucariota. En el caso de organismos eucariotas tendremos que tener en cuenta el que as secuencias solo mapearán en los exones, y algunas de ellas atravesarán de un exón a otro. En estos casos se utilizan *spliced mappers* como TopHat, HiSat y STAR.
-4. Reconstrucción del transcriptoma
-    * En esta etapa, las lecturas mapeadas al genoma y con las uniones de exones, son utilizadas para construir modelos de transcriptoma (Splicing alternativos). Existen distintas herramientas, una de las más utilizadas es cufflinks (y ahora del mismo grupo Stringtie). Nuevamente, esto no será necesario para el análisis del transcriptoma de procariotas.
-5. La siguiente etapa es la cuantificación de los transcriptos. 
-    * Esto implica asignar las lecturas a los transcriptos. En este punto, Cufflinks (Stringtie) ya tienen la información sobre que lecturas mapean contra cada transcripto, por lo que solo resta contarlas! Stringtie, adicionalmente realiza la cuantificación.
-    * Existen otras herramientas que mapean directamente las lecturas al transcriptoma, asumiendo que existe un transcriptoma de buena calidad para el organismo en cuestión (en general se usa en humanos o ratón; Sailfish, Kallisto, Salmon)
-    * El recuento de las lecturas asociadas a cada transcripto en general es una muy mala aproximación a la cantidad de transcripto, esto se debe distintos factores, principalmente el largo del transcripto. Por ende, los recuentos deben ser normalizados. Existen distintos métodos de normalización:
-    * Normalización dentro de una misma muestras (RPKM, FPKM, TPM, rlog)
-    * Normalización entre muestras
-6. Análisis de expresión diferencial
-    * Es importante tener en cuanta que los valores normalizados anteriormente no deben compararse entre condiciones para determinar el el grado de expresión diferencial. Con este objetivo existen herramientas específicas que calcualrán la magnitud del cambio y su significancia estadística, teniendo en cuenta, si existe, la información de las réplicas biológicas.
-    * Las mejores aplicaciones para realizar el análisis diferencial son edgeR, DESeq/DESeq2, y limma-voom.
-
-
-# Generar las colecciones
-En este caso nos va a interesar generar dos colecciones, una para las lecturas correspondientes a E. coli* crecida en medio LB y otra para las correspondientes a *E. coli* crecidas en medio MG.
-Adicionalmente, podemos crear una colección con todas las lecturas para hacer el control de calidad.
-
-# Determinar la calidad de las lecturas - FastQC / filtrados y recortes (Trimmomatic)
-Igualmente que en el caso anterior, es importante verificar la calidad de las lecturas obtenidas y realizar los filtrados y recortes necesarios.
-* Correr el FastQC en la colección con todas las lecturas
-* Correr el MultiQC con los resultados de FastQC
-* Analizar los datos
-
-# Genoma de referencia
-El genoma de referencia es el de *E. coli* K12. Acá es mecesario convertir el archivo .gtf a .gff.
-Para ello en la historia seleccionar el archivo, clickear en el icono 'edit' y seleccionar la opción convertir.
-
-# Mapeo de las lecturas obtenidas
-Como las lecturas que tenemos provienen de un estudio de RNAseq de procariotas, no es necesario que realicemos un mapeo que tenga en cuenta splicing. Por ello realizaremos el mapeo con Bowtie2. **Recordar seleccionar la opción para que reporte la estadística del mapeo**
-Para analizar los resultados de todas las lecturas utilizar MultiQC.
-Adicionalmente, no será necesario realizar la reconstrucción del transcriptoma.
-
-# Visualizar las lecturas mapeadas en JBROWSE
-De la misma forma que antes se puede utilizar JBROWSE para ver las lecturas mapeadas al transcriptoma de *E. coli*. Acá hay que agregar las pistas del genoma con su anotación y de los archivos SAM del mapeo.
-Mirando los resultados, tratar de determinar si nuestras secuencias vienen de una biblioteca 'stranded'.
-
 # Recuento y análisis de expresión diferencial de secuencias que mapean en cada transcripto
 Utilizaremos el programa featurecounts
 En opciones hay que elegir:
@@ -535,12 +517,11 @@ En opciones hay que elegir:
     * Esto se puede ver a partir de los resultados del alineamiento con Bowtie2, o con el protocolo utilizado para obtener las lecturas.
 * Gene annotation file	-> history -> Ecoli_k12.gtf
 
-
-##Inspección de los resultados utilizando el Scratchbook! 
+## Inspección de los resultados utilizando el Scratchbook! 
 El icono a la derecha de User en la barra superior, es el Scratchbook, cuando está activado nos permite ver resultados de varios análisis de forma simultánea!
 Utilizar el Scratchbook para visualizar los resultados de featurecounts!
 
-#Análisis de expresión diferencial
+# Análisis de expresión diferencial
 Aca hay que tener las listas correspondientes a cada condición..
 Si tenemos una lista única se puede separar usando: Apply Rule to Collection
 * Agregar filtrado, por expresión regular -> Lb (en un caso y en el otro MG)
@@ -584,8 +565,6 @@ Crear un heatmap para los genes. Podemos hacer un heatmap para tratar de ver gen
 4. Heatmap2
     * Coloring groups -> blue->white->red
     * Data scaling -> by row
-
-
 
 
 ## Otros analisis
