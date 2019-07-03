@@ -12,6 +12,7 @@ La imagen de galaxy bajada del repositorio de Docker fue modificada mediante la 
 2. Mapping
     * Bowtie2
     * JBROWSE
+    * LastZ
 
 4. deepTools
 
