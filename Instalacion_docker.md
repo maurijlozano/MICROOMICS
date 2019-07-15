@@ -35,6 +35,8 @@ Install the latest version of Docker CE and containerd, or go to the next step t
 
 `sudo apt-get install docker-ce docker-ce-cli containerd.io`
 
+Si aca sale un error *El paquete 'docker-ce' no tiene un candidato de instalación"*, hay que cambiar la versión del repositorio a 'bionic'.
+
 ## Para correr docker sin sudo!
 ```
 sudo usermod -a -G docker user_name
