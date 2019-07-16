@@ -214,7 +214,11 @@ tools:
 
 - name: data_manager_bowtie2_index_builder
   owner: devteam
-
+  
+- name: minimap2
+  owner: iuc
+  tool_panel_section_label: "Mapping"
+  
 - name: lastz
   owner: devteam
   tool_panel_section_label: "Mapping"
