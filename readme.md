@@ -66,13 +66,13 @@ Dicho esto, como **objetivos del trabajo práctico** nos planteamos los siguient
     * Realizar el análisis de expresión diferencial
 
 <a name="id3"></a>
-Día 1 - Obtención de la secuencia genómica de *Streptococcus pyogenes* FDAARGOS_190 
------------------------------------------------------------------------------------
-Las secuencias para este trabajo práctico se obtuvieron de [Unicycler](https://github.com/rrwick/Unicycler/tree/master/sample_data) y corresponden a secuencias *Streptococcus pyogenes* de la base de datos FDA-ARGOS. [Streptococcus pyogenes strain FDAARGOS_190](https://www.ncbi.nlm.nih.gov/nuccore/NZ_NBTO02000001.1). Esta cepa posee solo un cromosoma lineal de 1.763.879 bp. El genoma de *S. pyogenes* es relativamente facil de ensamblar, es chico y posee pocas secuencias repetitivas (5 copias del operon RNA y 6 copias de IS1548). En este caso contamos con 2 archivos fastq.gz obtenidos por secuenciación con la plataforma Illumina, que corresponen a las lecturas paired-end. Además tenemos lecturas largas generadas con la plataforma Oxford Nanopore.
+Día 1 - Obtención de la secuencia genómica un Staphylococcus aureus imaginario que posee un genoma reducido 
+-----------------------------------------------------------------------------------------------------------
+En el trabajo práctico utilizaremos, por cuestiones de tiempo, un set de datos artificial perteneciente a un *Staphylococcus aureus* imaginario con un genoma miniatura. Este set de datos fue tomado de [Galaxy australia training](https://galaxy-au-training.github.io/tutorials/modules/spades/). El link de descarga del set de datos es [zenodo.org/record/582600](https://zenodo.org/record/582600).
+Las lecturas corresponden a un experimento de secuenciación con Illumina de una cepa mutante de *S. aureus*. Los archivos que necesitamos son mutant_R1.fastq y mutant_R2.fastq, correspondientes a lecturas paired-end, de 150 bases de largo. Además, el número de bases secuenciadas equivale a una cobertura de 19x del genoma de la cepa salvaje (19x es una cobertura bastante baja!).
 
-**sets de datos alternativos:** Set de datos artificiales y mas chicos que pueden utilizarse para correr los análisis en menor tiempo.
-* Plásmidos de Shigella - Short/long reads, paired end.
-* mini genoma artificial de Staphylococcus aureus. Illumina paired-end reads, largo de 150 bases.
+* Si desea utilizar otros set de datos revise la siguiente dirección. [Enlace](https://github.com/maurijlozano/MICROOMICS/blob/master/datos_alternativos.md)  
+Los sets de datos provistos por Unicycler poseen tanto secuencias largas como cortas, pero se requiere mucho más tiempo para realizar el ensamblado.  
 
 # Iniciar Galaxy docker
 El prmier paso será iniciar el Docker de Galaxy en un puerto local, y montando la carpeta de trabajo. Dado que las instacias de Docker son de solo lectura, es necesario exportar los datos en una carpeta compartida.
@@ -163,23 +163,20 @@ En ambos casos un fragmento determinado de la biblioteca de ADN es secuenciado d
 1. Dos archivos FASTQ (uno por cada extremo secuenciado)
 En este caso, los ID deben coincidir, y además, el orden es importante.
 
-**Archivo 1**
 ```
+Archivo 1
  @M02286:19:000000000-AA549:1:1101:12677:1273 1:N:0:23
  CCTACGGGTGGCAGCAGTGAGGAATATTGGTCAATGGACGGAAGTCT
  +
  ABC8C,:@F:CE8,B-,C,-6-9-C,CE9-CC--C-<-C++,,+;CE
  @M02286:19:000000000-AA549:1:1101:15048:1299 1:
-```
 
-**Archivo 2**
-
-```
-@M02286:19:000000000-AA549:1:1101:12677:1273 2:N:0:23
-CACTACCCGTGTATCTAATCCTGTTTGATACCCGCACCTTCGAGCTTA
-+
---8A,CCE+,,;,<CC,,<CE@,CFD,,C,CFF+@+@CCEF,,,B+C,
-@M02286:19:000000000-AA549:1:1101:15048:1299 2:N:0:23
+Archivo 2
+ @M02286:19:000000000-AA549:1:1101:12677:1273 2:N:0:23
+ CACTACCCGTGTATCTAATCCTGTTTGATACCCGCACCTTCGAGCTTA
+ +
+ --8A,CCE+,,;,<CC,,<CE@,CFD,,C,CFF+@+@CCEF,,,B+C,
+ @M02286:19:000000000-AA549:1:1101:15048:1299 2:N:0:23
 ```
 
 2. Un único archivo conteniendo las dos secuencias pareadas
@@ -201,7 +198,8 @@ La principal herramienta que vamos a usar es FastQC. Adicionalmente, el análisi
 1. En el panel de herramientas, seleccionar FASTQ Quality control -> FastQC
     * En *Short read data from your current history* seleccionar las lecturas a analizar (este procedimiento debe realizarse para cada lectura). *Acá, se puede elegir cargar una lista o colección!*. Lo mejor es usar una lista no pareada para poder analizar los datos en conjunto con MultiQC.
 
-* En la *historia* abrir el archivo html generado
+* FastQC generará dos archivos: RawData y Webpage.
+* En la *historia* abrir el archivo html generado, haciendo click en el icono del ojo.
 * Diferentes datos para analizar
     * Per base sequence quality: x= posición a lo largo de las lecturas, y= calidad (Phred). 
     * Per base sequence content: x= posición a lo largo de las lecturas, y= frecuencia de cada bases
@@ -214,7 +212,8 @@ La principal herramienta que vamos a usar es FastQC. Adicionalmente, el análisi
 
 2. Para analizar una colección en conjunto utilizar MultiQC
 * Una vez corrido el FastQC, se puede analizar los datos en su conjunto mediante MultiQC.
-    * En MultiQC seleccionar como herramienta con la que se obtuvieron los resultados FastQC. MultiQC puede trabajar con resultados de colecciones tipo flat (no pareadas).
+    * En MultiQC seleccionar como herramienta con la que se obtuvieron los resultados FastQC. MultiQC puede trabajar con resultados de colecciones tipo flat (no pareadas). Como set de datos para MultiQC seleccionar la colección "RawData" generada por FastQC.
+    * Visualizar los resultados haciendo click en el ojo de galaxy.
 
 ## Filtrado y recortado
 La etapa siguiente es filtrar y recortar las secuencias basándonos en el análisis de calidad, ya que secuencias en las que los nucleótidos incorporados tienen alto error podrían generar sesgos en los análisis posteriores.
@@ -231,43 +230,78 @@ El procesamiento típico de las secuencias incluye:
     * recortado de secuencias correspondientes a adaptadores
 
 1. Filtrado/enmascarado/recortado de secuencias
-Para realizar el filtrado/recortado de las secuencias se pueden utilizar varios programas: Trimmomatic, Trim Galore, Cutadapt y otros.
+Para realizar el filtrado/recortado de las secuencias se pueden utilizar varios programas: Trimmomatic, Trim Galore, Cutadapt y otros. Nosotros utilizaremos el programa trimmomatic que permite procesar colecciones de secuencias pareadas.
 
 ### Trimmomatic
-ILLUMINACLIP: remueve adaptadores y secuencias específicas de illumina.
-SLIDINGWINDOW: realiza el recorte por 'sliding window', cortando una vez que la calidad promedio de la ventana cayó por debajo de un determinado valor.
-MINLEN: elimina la lectura si tiene un largo menor al mínimo.
-LEADING: corta bases del comienzo de la lectura si su calidad es menor a un valor dado.
-TRAILING: corta bases del final de la lectura si su calidad es menor a un valor dado.
-CROP: corta las secuencias a un largo uniforme.
-HEADCROP: corta un número especificado de bases del comienzo de cada lectura.
-AVGQUAL: elimina las secuencias con un score medio menor al especificado.
-MAXINFO: corte adaptativo, maximiza el valor de cada lectura balanceando el largo y la calidad. 
+Para filtrar las secuencias o extremos con baja calidad utilizaremos Trimmomatic. Lo primero es seleccionar nuestras lecturas pareadas, ya sea de forma individual o como colección.
+
+* Single-end or paired-end reads? -> Paired-end (as collection)
+    * Select FASTQ dataset collection with R1/R2 pair
+    
+* Perform initial ILLUMINACLIP step? -> No (nuestras secuencias no poseen los adaptadores de Illumina)
+* Trimmomatic Operation  
+Por defecto, Trimmomatic realiza una operación de Slidingwindow.
+
+* Output trimlog file?  
+* Output trimmomatic log messages?  
+    *Los archivos log son necesarios si queremos analizar los resultados con MultiQC*.
+
+
+**Operaciones que puede realizar Trimmomatic:**
+ILLUMINACLIP: remueve adaptadores y secuencias específicas de illumina.  
+SLIDINGWINDOW: realiza el recorte por 'sliding window', cortando una vez que la calidad promedio de la ventana cayó por debajo de un determinado valor.  
+MINLEN: elimina la lectura si tiene un largo menor al mínimo.  
+LEADING: corta bases del comienzo de la lectura si su calidad es menor a un valor dado.  
+TRAILING: corta bases del final de la lectura si su calidad es menor a un valor dado.  
+CROP: corta las secuencias a un largo uniforme.  
+HEADCROP: corta un número especificado de bases del comienzo de cada lectura.  
+AVGQUAL: elimina las secuencias con un score medio menor al especificado.  
+MAXINFO: corte adaptativo, maximiza el valor de cada lectura balanceando el largo y la calidad.  
 
 Para secuencias pareadas Trimmomatic devuelve dos resultados, uno en el que ambos pares están presentes, y un segundo resultado conteniendo las secuencias no pareadas.
 
 ### otra ocpción -> Trim Galore!
 * Seleccionar ->  “Is this paired- or single-end”: Paired-end
-* Seleccionar -> param-file “Reads in FASTQ format #1”: 
-* Seleccionar -> param-file “Reads in FASTQ format #2”: 
+    * Seleccionar -> param-file “Reads in FASTQ format #1”: 
+    * Seleccionar -> param-file “Reads in FASTQ format #2”: 
 
 ### otra opción: Cutadapt (No instalado)
-    * Utilizar Cutadapt con los siguientes parámetros
-        * “Single-end or Paired-end reads?”: Paired-end
-        * param-file “FASTQ/A file #1”: reads_1 (Input dataset)
-        * param-file “FASTQ/A file #2”: reads_2 (Input dataset)
+* Utilizar Cutadapt con los siguientes parámetros
+* “Single-end or Paired-end reads?”: Paired-end
+    * param-file “FASTQ/A file #1”: reads_1 (Input dataset)
+    * param-file “FASTQ/A file #2”: reads_2 (Input dataset)
 
-    * Read options: Para las opciones de la lectura1 y lectura 2:
-    * **En esta parte hay que indicar que adaptadores fueron usados, en algunos casos el proveedor del servicio de secuenciación nos puede enviar las secuencias con los adaptadores ya removidos...**
+* Read options: Para las opciones de la lectura1 y lectura 2:
+* **En esta parte hay que indicar que adaptadores fueron usados, en general el proveedor del servicio de secuenciación nos enviará las secuencias con los adaptadores ya removidos...**
 
-    * En “Adapter Options” -> “Minimum overlap length”: 3
-    * En "filter Options” -> “Minimum length”: 20
-    * En “Read Modification Options” -> “Quality cutoff”: 20
-    * En “Output Options” -> “Report”: Yes
+* En “Adapter Options” -> “Minimum overlap length”: 3
+* En "filter Options” -> “Minimum length”: 20
+* En “Read Modification Options” -> “Quality cutoff”: 20
+* En “Output Options” -> “Report”: Yes
 
 * En el caso de colecciones pareadas, Cutadapt devuelve las lecturas por separado...*
 
 [Mirar como funciona el algoritmo de Cutadapt!](https://galaxyproject.github.io/training-material/topics/sequence-analysis/tutorials/quality-control/tutorial.html)
+
+## Ensamblado de la secuencias utilizando Unicycler
+Unicycler es un ensamblador híbrido para genomas bacterianos. Puede ensamblar lecturas generadas con la plataforma Illumina por medio de SPAdes, pero tambien puede utilizar lecturas largas generadas con PacBio o Nanopore, utilizando una tubería *miniasm+Racon*. Para generar el mejor ensamblado, si se dispone de lecturas cortas y largas, unicycler realizará un ensamblado híbrido facilitando la obtención de un genoma cerrado de alta calidad.  
+Para más información mirar la página de [Unicycler](https://github.com/rrwick/Unicycler)
+
+Las opciones son las siguientes:
+* Paired or Single end data?  
+  Select between paired and single end data
+    *Select a paired collection
+    
+* Select long reads. If there are no long reads, leave this empty
+
+* Select Bridging mode
+   Afectará principalmente ensamblados realizados utilizando tanto secuencias largas como cortas.  
+* Exclude contigs from the FASTA file which are shorter than this length (bp) -> defecto 100  
+* The expected number of linear (i.e. non-circular) sequences in the assembly -> defecto 0  
+
+El resto de los parámetros se pueden dejar en un principio por defecto. Hay muchos parámetros que corresponden otros programas utilizados en la tubería, principalmente SPAdes, TBLASTN, Pilon, etc.  
+
+
  
 <a name="id4"></a>
 Día 2: RNAseq 
