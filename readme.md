@@ -308,16 +308,16 @@ Unicycler generará dos archivos: Final Assembly y Final Assembly Graph
 Quast es un programa muy completo para analizar la calidad de un genoma ensamblado *de novo*, incluyendo además la opción de búsqueda y anotación de genes (Glimmer o GeneMarkS). Si se cuenta con un genoma de referencia, realizará además una serie de análisis de interés, como la búsqueda de polimorfismos, el alineamiento de los contigs al genoma de referencia.
 
 Existen una serie de parámetros de uso común para evalaur la calidad de un ensamblado:
-**N50** es la longitud del contig para el cual, si sumamos su longitud y la de todos los contigs de mayor tamaño, tenemos por lo menos el 50% del total secuenciado.
-**NG50**, solo se calcula si tenemos un genoma de referencia, y es igual a N50, pero tomando como largo total el del genoma de referencia.
-Análogamente se definen N75 y NG75.
-**L50** (L75, LG50, LG75) es el número mínimo de contigs cuyo largo sumado is mayor al 50% del largo total ensamblado.
-**NAXX** (NA50,NGA50, ...) corresponde a los valores anteriores pero calculados teniendo en cuenta los alineamientos en vez de los contigs.    
+**N50** es la longitud del contig para el cual, si sumamos su longitud y la de todos los contigs de mayor tamaño, tenemos por lo menos el 50% del total secuenciado.  
+**NG50**, solo se calcula si tenemos un genoma de referencia, y es igual a N50, pero tomando como largo total el del genoma de referencia.  
+Análogamente se definen N75 y NG75.  
+**L50** (L75, LG50, LG75) es el número mínimo de contigs cuyo largo sumado is mayor al 50% del largo total ensamblado.  
+**NAXX** (NA50,NGA50, ...) corresponde a los valores anteriores pero calculados teniendo en cuenta los alineamientos en vez de los contigs.  
 Si utilizamos un genoma de referencia, el Quast reportará también los contigs que están mal ensamblados (misassemblies) con respecto a la referencia. Para que un contig sea reportado como mal ensamblado debera alinear incorrectamente con el genoma de referencia, esto es, por ejemplo:  
-* relocation: el extremo izquierdo alinea a más de 1kb de distancia del extremo derecho en el genoma de referencia, o están solapados en más de 1kb.
-* translocation: las secuencias alinean en cromosomas diferentes
-* inversion: la secuencia alinea en hebras diferentes
-Para más información mirar el [manual](http://quast.bioinf.spbau.ru/manual.html).
+* relocation: el extremo izquierdo alinea a más de 1kb de distancia del extremo derecho en el genoma de referencia, o están solapados en más de 1kb.  
+* translocation: las secuencias alinean en cromosomas diferentes  
+* inversion: la secuencia alinea en hebras diferentes  
+Para más información mirar el [manual](http://quast.bioinf.spbau.ru/manual.html).  
 
 **Para correr Quast completar los siguientes campos:**
 * Use customized names for the input files? -> si queremos nombres personalizados en los gráficos  
@@ -340,8 +340,64 @@ Las opciones siguientes tienen que ver con la detección de misassemblies (Las d
 * Lower threshold for detecting partially unaligned contigs  
 
 *Algunos de los gráficos no son mostrados en galaxy pero mirando el archivo log se puede buscar la ruta en la que han sido guardados dentro de la carpeta ~/Galaxy_storage/*
+  
+  
+## Anotación del genoma utilizando Proka
 
- 
+En esta parte utilizaremos el software Prokka para realizar la anotación del genoma. El Prokka es una tubería que utiliza programas de terceros para identificar regiones codificantes de proteinas y genes codificantes de RNAs (tRNAs, rRNAs).  
+Para la anotación de proteinas, primero usa el programa Prodigal para identificar la secuencia codificante, y luego asigna una función probable por transferencia por homología utilizando una o varias bases de datos de proteinas y dominios protéicos.  
+Como resultado, genera un archivo anotado en difenentes formatos, incluyendo GFF3.
+
+**Procedimiento**
+* Contigs to annotate -> seleccionar los contigs en formato fasta.  
+* Locus tag prefix -> prefijo que agregará en el locus_tag de cada región codificante
+* Locus tag counter increment -> 1
+* GFF version -> versión del formato gff -> 3
+* Force GenBank/ENA/DDJB compliance -> si queremos que sea compatible con genbank
+
+
+Equivalent to --addgenes --mincontiglen 200 --centre Prokka (or other centre specified below)
+Add 'gene' features for each 'CDS' feature (--addgenes)
+Minimum contig size (--mincontiglen)
+200
+NCBI needs 200
+Sequencing centre ID (--centre)
+Genus name (--genus)
+May be used to aid annotation, see --usegenus below
+Species name (--species)
+Strain name (--strain)
+Plasmid name or identifier (--plasmid)
+Kingdom (--kingdom)
+Genetic code (transl_table)
+11
+Use genus-specific BLAST database (--usegenus)
+Will use the BLAST database for the genus specified above, if installed
+Optional FASTA file of trusted proteins to first annotate from (--proteins)
+Improve gene predictions for highly fragmented genomes (--metagenome)
+Will set --meta option for Prodigal
+Fast mode (--fast)
+Skip CDS /product searching
+Similarity e-value cut-off
+0.000001
+Enable searching for ncRNAs with Infernal+Rfam (SLOW!) (--rfam)
+Don't run rRNA search with Barrnap
+Don't run tRNA search with Aragorn
+Additional outputs
+Select/Unselect all
+Annotation in GFF3 format, containing both sequences and annotations (.gff)
+Standard GenBank file. If the input was a multi-FASTA, then this will be a multi-GenBank, with one record for each sequence (.gbk)
+Nucleotide FASTA file of the input contig sequences (.fna)
+Protein FASTA file of the translated CDS sequences (.faa)
+Nucleotide FASTA file of all the annotated sequences, not just CDS (.ffn)
+An ASN1 format "Sequin" file for submission to GenBank. It needs to be edited to set the correct taxonomy, authors, related publication, etc. (.sqn)
+Nucleotide FASTA file of the input contig sequences, with extra Sequin tags in the sequence description lines (.fsa)
+Feature Table file (.tbl)
+Annotations in tabular format including COGs etc.
+Unacceptable annotations - the NCBI discrepancy report (.err)
+Statistics relating to the annotated features found (.txt)
+
+
+  
 <a name="id4"></a>
 Día 2: RNAseq 
 -------------
