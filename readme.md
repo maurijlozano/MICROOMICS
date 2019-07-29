@@ -8,20 +8,21 @@ MicroOmics
 3. [Día 1](#id3)
 4. [Día 2](#id4)
 
-# Información del curso <a name="id1"></a>
+<a name="id1"></a>
+# Información del curso 
 
 ## Objetivos:
 Que los alumnos logren:
-- Adquirir habilidades para el desarrollo y análisis de resultados ómicos en el área de la microbiología
-- Generar espacios de análisis de casos y discusión de resultados de trabajos científicos publicados de la temática
+- Adquirir habilidades para la obtención y análisis de resultados a escala *ómica* en el área de la microbiología  
+- Generar un espacio para el análisis de casos y discusión de resultados de trabajos científicos  
 
 ## Programa resumido
-Las actividades del curso constarán de clases teóricas, seminarios y un trabajo práctico.
-Día 1: Genómica (8hs).Introducción del tema y estudio de casos.
-Día 2: Transcriptómica (8hs). Introducción del tema y estudio de casos.
-Día 3: Proteómica (8hs). Introducción del tema y estudio de casos.
-Día 4: Metabolómica(8hs). Introducción del tema y estudio de casos.
-Día 5: Mañana: Presentación de seminarios y proyectos de investigación de los alumnos; Tarde: Evaluación
+Las actividades del curso constarán de clases teóricas, seminarios y un trabajo práctico.  
+**Día 1**: Genómica (8hs) y meta-genómica. Introducción del tema, estudio de casos y trabajo práctico.  
+**Día 2**: Transcriptómica (8hs). Introducción del tema, estudio de casos y trabajo práctico.  
+**Día 3**: Proteómica (8hs) y Metabolómica(8hs). Introducción del tema y estudio de casos.  
+**Día 4**: Exposiciones de alumnos. Integración de datos obtenidos con plataformas ómicas.  
+**Día 5**: Exposiciones de alumnos, Casos de estudio integrales. Evaluación
 
 - **Genómica**: Plataformas de secuenciación. Historia y últimas tecnologías. Procesamiento de lecturas y ensamblado. Anotación de genomas. Homología. Filogenia. Genómica comparativa.
 - **Transcriptómica**: Antecedentes, otros métodos para la evaluación diferencial de la expresión. RNAseq. Procesamiento, análisis y visualización de los resultados. RNAseq de reguladores transcripcionales. Búsqueda de reguladores, mutagenesis y transcriptómica. Búsqueda de determinantes involucrados en la comunicación rizobio-leguminosa durante la simbiosis mediante Dual-RNAseq. Redes regulatorias de la expresión de flagelos en Bradyrhizobium diazoefficiens. Caracterización molecular de los mecanismos que regulan la transferencia conjugativa de plásmidos en rizobios. 
@@ -31,26 +32,27 @@ Día 5: Mañana: Presentación de seminarios y proyectos de investigación de lo
 ## **Trabajo práctico**: Manipulación de secuencias. Ensamblaje de un genoma y análisis comparativo del mismo. Mapeo de lecturas de RNAseq, análisis diferencial y visualización de resultados.
 
 La parte práctica del curso la realizaremos utilizando una instanica local de Galaxy, por medio de Docker.
-Para instalar docker en sus comutadoras personales (ya estará instalado para el curso) pueden seguir las instrucciones provistas en el enlace siguiente [Instalación de Docker](https://github.com/maurijlozano/MICROOMICS/blob/master/Instalacion_docker.md)
+Para instalar docker en sus comutadoras personales (ya estará instalado para el curso) pueden seguir las instrucciones provistas en el enlace siguiente [Instalación de Docker](https://github.com/maurijlozano/MICROOMICS/blob/master/Instalacion_docker.md).  
+En este documento encontrarán las instrucciones para realizar la instalación tanto en linux como en windows. Para usuarios de Mac, encontrarán información para la instalación de docker en la página siguiente: [Docker-mac ](https://docs.docker.com/docker-for-mac/install/).  
 
-Adicionalmente, encontrará información sobre la imagen de docker utilizada en el curso en el enlace siguiente [MicroOmics](https://github.com/maurijlozano/MICROOMICS/blob/master/Microomics_docker/Info_docker_Image.md)
+Adicionalmente, encontrará información sobre la imagen de docker utilizada en el curso en el enlace siguiente [MicroOmics](https://github.com/maurijlozano/MICROOMICS/blob/master/Microomics_docker/Info_docker_Image.md).  
 
-
-Trabajo Práctico <a name="id2"></a>
+<a name="id2"></a>
+Trabajo Práctico 
 ================
 
-El objetivo de los experimentos de secuenciación es obtener la sucesión de bases nucleotídicas (secuencia) que componen el ADN o ARN. Como ya se vio en las clases teóricas existen diferentes métodos de secuenciación, que a partir de una muestra de ADN/ARN (biblioteca/library) obtienen una colección de fragmentos de secuencia, usualmente cortos (aunque con los años se ha ido aumentando el largo de los mismos) normalmente llamados 'lecturas' o **reads**.
+El objetivo de los experimentos de secuenciación es obtener la sucesión de bases nucleotídicas (secuencia) que componen el ADN o ARN. Como ya se vio en las clases teóricas existen diferentes métodos de secuenciación, que a partir de una muestra de ADN/ARN (biblioteca/library) obtienen una colección de fragmentos de secuencia, usualmente cortos llamados comunmente 'lecturas' o **reads**.  
 Los métodos modernos de secuenciación obtienen usualmente números masivos de lecturas por cada experimento. Dado que los métodos de secuenciación no son perfectos, las lecturas generalmente tienen un error asociado, como por ejemplo, la probabilidad de haber asignado un nucleótido incorrecto.
 
 Estas secuencias pueden ser obtenidas a partir de muestras de ADN o ARN con diferentes objetivos.
 * ADN: para reconstruir la secuencia genómica de un organismo, para caracterizar la diversidad de un ambiente (secuenciación de 16S rRNA, secuencias ITS, etc) o para caracterizar el metagenoma de un ambiente determinado.
 * ARN: para reconstruir el transcriptoma de un organismo, para estudiar la expresión diferencial de genes o para estudiar el metatranscriptoma asociado a un ambiente determinado.
 
-Dicho esto, como **objetivo del trabajo práctico** nos planteamos los siguientes puntos:
+Dicho esto, como **objetivos del trabajo práctico** nos planteamos los siguientes puntos:
 
 1. **Día 1**: A partir de datos de un experimento de secuenciación:
     * Analizar la calidad de las secuencias obtenidas
-    * Realizar el trimming y filtrado de las secuencias
+    * Realizar el *trimming* y filtrado de las secuencias
     * Realizar el ensamblado *de novo* de las secuencias
         * Analizar la calidad de los resultados
     * Realizar la anotación del genoma
@@ -58,13 +60,13 @@ Dicho esto, como **objetivo del trabajo práctico** nos planteamos los siguiente
         
 2. **Día 2**: A partir de datos de un experimento de RNAseq:
     * Analizar la calidad de las secuencias obtenidas
-    * Realizar el trimming y filtrado de las secuencias
+    * Realizar el *trimming* y filtrado de las secuencias
     * Mapear las secuencias a un genoma de referencia
     * Realizar el recuento de secuencias para cada transcripto
     * Realizar el análisis de expresión diferencial
 
-
-Día 1 - Obtención de la secuencia genómica de *Streptococcus pyogenes* FDAARGOS_190 <a name="id3"></a>
+<a name="id3"></a>
+Día 1 - Obtención de la secuencia genómica de *Streptococcus pyogenes* FDAARGOS_190 
 -----------------------------------------------------------------------------------
 Las secuencias para este trabajo práctico se obtuvieron de [Unicycler](https://github.com/rrwick/Unicycler/tree/master/sample_data) y corresponden a secuencias *Streptococcus pyogenes* de la base de datos FDA-ARGOS. [Streptococcus pyogenes strain FDAARGOS_190](https://www.ncbi.nlm.nih.gov/nuccore/NZ_NBTO02000001.1). Esta cepa posee solo un cromosoma lineal de 1.763.879 bp. El genoma de *S. pyogenes* es relativamente facil de ensamblar, es chico y posee pocas secuencias repetitivas (5 copias del operon RNA y 6 copias de IS1548). En este caso contamos con 2 archivos fastq.gz obtenidos por secuenciación con la plataforma Illumina, que corresponen a las lecturas paired-end. Además tenemos lecturas largas generadas con la plataforma Oxford Nanopore.
 
@@ -93,16 +95,16 @@ Para la realización del TP, además de esta guía se pueden mirar los tutoriale
 
 # Cargando los datos de secuenciación
 Como ya se vio en la teoría existen diversas tecnologías de secuenciación, a partir de las cuales obtendremos 1 o múltiples archivos, en general, de tipo FASTQ.
-Para comenzar el análisis de las secuencias, la primer etapa es cargarlas en el servidor de galaxy. Nosotros ahora estamos trabajando en una instancia local del servidor, por lo que la carga de archivos será rápida. **Recuerden, que si utilizaran el servidor online, según el tamaño de los archivos la carga puede ser lenta, y para archivos grandes se recomienda utilizar ftp.**
+Para comenzar el análisis de las secuencias, la primer etapa es cargarlas en el servidor de galaxy. Nosotros ahora estamos trabajando en una instancia local del servidor, por lo que la carga de archivos será rápida. **Recuerden, que si utilizaran el servidor online, según el tamaño de los archivos la carga puede ser lenta, y para archivos grandes (> 2gb) es necesario utilizar un ftp.**
 
 ## Procedimiento
 1. En el panel de la izquierda, seleccionar el icono **upload**, o seleccionar **Get Data** -> **Upload File from your computer**
     * Seleccionar la opción: **chose local file**
-
+Recuerde que pueden cargarse múltiples archivos en una sola operación.
 
 ## Colecciones
-Los archivos con las lecturas se pueden organizar en colecciones para simplificar la ejecución de los diferentes programas (procesamiento colectivo), y para organizar de una mejor manera la *historia*.
-ej.
+Los archivos con las lecturas se pueden organizar en colecciones para simplificar la ejecución de los diferentes programas (procesamiento colectivo), y para organizar de una mejor manera la *historia*.  
+ej. Se cuenta con cuatro archivos correspondientes a un experimento de secuenciación pair-end. Este dataset contiene por lo tanto secuencias forward (directas) y reverse (reversas), que pueden organizarse en colecciones para indicar a los programas los datos que estan pareados (f,r), y que pertenecen a una misma muestra (S1 o S2).  
 ```
    Data sets individuales                           Colección
    
@@ -121,25 +123,22 @@ ej.
 3. Clickear en **for all selected**
 4. Seleccionar el tipo de colección a crear
     * Puede ser **Build Dataset List** -> para datasets no **paired-end**
-    * Puede ser **Build List of Dataset pairs** -> para datasets no **paired-end**
+    * Puede ser **Build List of Dataset pairs** -> para datasets **paired-end**
         * En este caso se pueden usar filtros para que se seleccionen automáticamente los pares de muestras
         * Para lecturas pareadas es conveniente generar ambos tipos de colecciones.
 
 ### También se puede cargar las secuencias directamente a una colección!
 
 ## Operaciones con colecciones
-1. las colecciones se pueden renombrar
-2. Etiquetas: hay dos tipos de etiquetas
-    * Clickear an el icono de etiqueta
-    * normales
-    * hashtag -> estas se propagan a lo largo del prcocesamiento
-
-* Es util cuando relicemos un mapeo tildar la opción* ***set reads group information***. Esto nos va a permitir luego unir los data sets en uno solo archivo sin perder información -> NGS: Picard → MergeSam
-
+1. Renombrar, para facilitar su identificación
+2. Etiquetar: hay dos tipos de etiquetas que facilitan el seguimiento de los datos
+    * Para crear una etiqueta, clickear an el icono de etiqueta (tag). Hay dos tipos de etiquetas:
+        * normales
+        * hashtag (#) -> estas se propagan a los resultados!
 
 # Manipulación y control de calidad de archivos FASTQ
 ## ¿Qué es el formato FASTQ?
-El formato FASTQ es un formato para datos de secuenciación que además de incluir la secuencia para cada lectura incluye la *calidad* para cada posición. En la actualidad, el estándar es el formato FASTQ sanger que se muestra a continuación.
+El formato FASTQ es un formato para datos de secuenciación que además de incluir la secuencia nucleotídica para cada lectura incluye la *calidad* para cada posición. En la actualidad, el estándar es el formato FASTQ sanger que se muestra a continuación.
 
 ```
 @M02286:19:000000000-AA549:1:1101:12677:1273 1:N:0:23
@@ -151,13 +150,13 @@ ABC8C,:@F:CE8,B-,C,-6-9-C,CE9-CC--C-<-C++,,+;CE<,,CD,CEFC,@E9<FCFCF?9
 La primer linea para cada lectura contiene un **@** seguido de una identificación (read ID) e información adicional de la corrida de secuenciación.
 La segunda linea contiene la secuencia asignada.
 La tercera linea contiene un **+**, opcionalmente seguido de más información.
-La cuarta linea contiene el puntaje de calidad en codificado como una serie de caracteres ASCII, para secuencias FASTQ Illumina >1.8 la codificación es Phred+33 - ASCII desde el caracter 33(!) al 126(~).
+La cuarta linea contiene el puntaje de **calidad** codificado como una serie de caracteres ASCII. Para secuencias FASTQ Illumina >1.8 la codificación es Phred+33 - ASCII desde el caracter 33(!) al 126(~).
 La calidad Q es un entero representando la probabilidad *p* de que la base asignada sea incorrecta. Para una probabilidad menor a 0.05 -> Q tiene que ser mayor a ~13. **Q = -10 log(p)** 
-En general, el punto de corte utilizado es un valor de ~>20, correspondiente a una p < 0.01, ed decir un error cada 100 bases (99% de precisión).
+En general, el punto de corte utilizado es un valor de ~>20, correspondiente a una p < 0.01, es decir un error cada 100 bases (99% de precisión).
 
 ## Distintos formatos de archivo FASTQ
 ### Paired end vs mate-pair
-Existen distintos tipos de experimentos de secuenciación, que generan diferentes tipos de archivos FASTQ. Estos experimentos fueron pensados con dos objetivos: a. aumentar el largo de cada lectura (paired end) y b. conectar regiones genómicas alejadas en una longitud determinada (2kb, 8kb, etc) para lograr el ensamblado de genomas cerrados (mate pair). Con el advenimiento de los métodos de secuenciación de fragmentos largos (Nanopore, PACBIO) la tecnología mate pair está dejándose de usar.  
+Existen distintos tipos de experimentos de secuenciación, que generan diferentes tipos de archivos FASTQ. Estos experimentos fueron pensados con dos objetivos: a. aumentar el largo de cada lectura (paired-end) y b. conectar regiones genómicas alejadas en una longitud determinada (2kb, 8kb, etc) para lograr el ensamblado de genomas cerrados (mate-pair). Con el advenimiento de los métodos de secuenciación de fragmentos largos (Nanopore, PACBIO) la tecnología mate-pair está dejándose de usar.  
 
 En ambos casos un fragmento determinado de la biblioteca de ADN es secuenciado de ambos extremos, quedando ambas secuencias vinculadas (ver ID de la secuencias). En estos casos se pueden obtener dos tipos de archivos FASTQ: 
 
@@ -270,8 +269,8 @@ Para secuencias pareadas Trimmomatic devuelve dos resultados, uno en el que ambo
 
 [Mirar como funciona el algoritmo de Cutadapt!](https://galaxyproject.github.io/training-material/topics/sequence-analysis/tutorials/quality-control/tutorial.html)
  
-
-Día 2: RNAseq <a name="id4"></a>
+<a name="id4"></a>
+Día 2: RNAseq 
 -------------
 
 # Introducción
