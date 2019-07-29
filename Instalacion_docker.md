@@ -4,7 +4,8 @@ INSATALAR DOCKER
 [Instrucciones Linux](#linux)  
 [Instrucciones Windows](#windows)  
 
-## Instalar docker en Linux <a name="linux"></a>
+<a name="linux"></a>
+## Instalar docker en Linux 
 
 Instrucciones en [https://docs.docker.com/install/linux/docker-ce/ubuntu/](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
 
@@ -50,8 +51,8 @@ newgrp docker
 ```
 * El último comando permite “refrescar” el grupo sin tener que reiniciar*
 
-
-## Instalar Docker en windows <a name="windows"></a>
+<a name="windows"></a>
+## Instalar Docker en windows 
 Bajar el programa del siguiente link [Docker](https://download.docker.com/win/stable/Docker%20for%20Windows%20Installer.exe) e instalarlo ejecutando el archivo descargado.
 
 ### Corriendo docker en windows
