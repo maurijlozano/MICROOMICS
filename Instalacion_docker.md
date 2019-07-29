@@ -95,6 +95,10 @@ docker run -d -p 8080:80 -v ruta/a/la/carpeta/de/trabajo:/export/ maurijlozano/m
 
 En este comando, el texto siguiente "ruta/a/la/carpeta/de/trabajo" debe ser reemplazado por la ruta en la cual se guardarán los archivos.
 
+# Acceder a Galaxy/MicroOmics
+Para acceder a Galaxy deberá abrir su explorador de internet, y escribir la dirección:
+[http://localhost:8080](http://localhost:8080).  
+
 ## Configuración e instalación de aplicaciones
 Para instalar paquetes adicionales a la imagen, deberán acceder como administradores. La cuenta de administrador por default es: 
 
