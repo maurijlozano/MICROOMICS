@@ -229,7 +229,7 @@ El procesamiento típico de las secuencias incluye:
     * en su comienzo o final
     * recortado de secuencias correspondientes a adaptadores
 
-1. Filtrado/enmascarado/recortado de secuencias
+**Filtrado/enmascarado/recortado de secuencias**
 Para realizar el filtrado/recortado de las secuencias se pueden utilizar varios programas: Trimmomatic, Trim Galore, Cutadapt y otros. Nosotros utilizaremos el programa trimmomatic que permite procesar colecciones de secuencias pareadas.
 
 ### Trimmomatic
@@ -301,6 +301,45 @@ Las opciones son las siguientes:
 
 El resto de los parámetros se pueden dejar en un principio por defecto. Hay muchos parámetros que corresponden otros programas utilizados en la tubería, principalmente SPAdes, TBLASTN, Pilon, etc.  
 
+Unicycler generará dos archivos: Final Assembly y Final Assembly Graph
+
+
+## Análisis de la calidad del ensamblado mediante QUAST
+Quast es un programa muy completo para analizar la calidad de un genoma ensamblado *de novo*, incluyendo además la opción de búsqueda y anotación de genes (Glimmer o GeneMarkS). Si se cuenta con un genoma de referencia, realizará además una serie de análisis de interés, como la búsqueda de polimorfismos, el alineamiento de los contigs al genoma de referencia.
+
+Existen una serie de parámetros de uso común para evalaur la calidad de un ensamblado:
+**N50** es la longitud del contig para el cual, si sumamos su longitud y la de todos los contigs de mayor tamaño, tenemos por lo menos el 50% del total secuenciado.
+**NG50**, solo se calcula si tenemos un genoma de referencia, y es igual a N50, pero tomando como largo total el del genoma de referencia.
+Análogamente se definen N75 y NG75.
+**L50** (L75, LG50, LG75) es el número mínimo de contigs cuyo largo sumado is mayor al 50% del largo total ensamblado.
+**NAXX** (NA50,NGA50, ...) corresponde a los valores anteriores pero calculados teniendo en cuenta los alineamientos en vez de los contigs.    
+Si utilizamos un genoma de referencia, el Quast reportará también los contigs que están mal ensamblados (misassemblies) con respecto a la referencia. Para que un contig sea reportado como mal ensamblado debera alinear incorrectamente con el genoma de referencia, esto es, por ejemplo:  
+* relocation: el extremo izquierdo alinea a más de 1kb de distancia del extremo derecho en el genoma de referencia, o están solapados en más de 1kb.
+* translocation: las secuencias alinean en cromosomas diferentes
+* inversion: la secuencia alinea en hebras diferentes
+Para más información mirar el [manual](http://quast.bioinf.spbau.ru/manual.html).
+
+**Para correr Quast completar los siguientes campos:**
+* Use customized names for the input files? -> si queremos nombres personalizados en los gráficos  
+   * Contigs/scaffolds file -> seleccionar el archivo Final Assembly
+* Type of assembly -> Genome  
+* Use a reference genome? -> yes  
+   * Reference genome -> seleccionar el genoma de referencia
+   * Genomic feature positions in the reference genome -> seleccionar el archivo GFF de features  
+   * Type of organism -> prokaryote
+* Lower threshold for a contig length (in bp)-> defecto 500
+* Are assemblies scaffolds rather than contigs? -> No
+* Is genome large (> 100 Mbp)? -> No
+
+En la pestaña *Genes* se puede pedir que realize la predicción de genes. 
+En la pestaña *alingment* se pueden modificar varios parámetros del alineamiento. En este caso los dejaremos con los valores por defecto.  
+
+Las opciones siguientes tienen que ver con la detección de misassemblies (Las dejaremos en los valores por defecto).  
+* Lower threshold for the relocation size (gap or overlap size between left and right flanking sequence)  
+* Max allowed scaffold gap length difference for detecting corresponding type of misassemblies--scaffold-gap-max-size)  
+* Lower threshold for detecting partially unaligned contigs  
+
+*Algunos de los gráficos no son mostrados en galaxy pero mirando el archivo log se puede buscar la ruta en la que han sido guardados dentro de la carpeta ~/Galaxy_storage/*
 
  
 <a name="id4"></a>
