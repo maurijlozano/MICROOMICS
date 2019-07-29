@@ -1,6 +1,8 @@
+INSATALAR DOCKER
+================
 
-# Instalar docker
-Instrucciones en **https://docs.docker.com/install/linux/docker-ce/ubuntu/**
+# Instalar docker en Linux
+Instrucciones en [https://docs.docker.com/install/linux/docker-ce/ubuntu/](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
 
 ## Instalar paquetes necesarios para la instalación de docker
 ```
@@ -45,9 +47,16 @@ newgrp docker
 * El último comando permite “refrescar” el grupo sin tener que reiniciar*
 
 
-## Configuración e instalacion de aplicaciones
-1. Agregar usuario con privilegios de administrador.
-.* Para configurar el administrador, necesario para instalar packetes desde el *Toolshed*, es necesario editar/crear en la carpeta compartida el archivo config/galaxy.yml
+# Instalar Docker en windows
+Bajar el programa del siguiente link [Docker](https://download.docker.com/win/stable/Docker%20for%20Windows%20Installer.exe) e instalarlo ejecutando el archivo descargado.
+
+## Corriendo docker en windows
+Buscar el programa en el menu de windows y ejecutarlo.
+*No tildar la opción* "usar contenedores de windows en vez de contenedores de linux".
+
+Cuando aparece la ballenita de docker en la bandeja de aplicaciones de windows (barra de windows, en la esquina derecha). Hacer click sobre el icono para verificar que la aplicacion se está ejecutando.
+
+Los comandos de docker se ejecutaran utilizando **Powershell** de windows!
 
 ## Algunos comandos útiles de docker
 
@@ -71,3 +80,18 @@ docker rmi IMAGE_ID #borrar imagen
 exit #Cierra la imagenes
 detach #Sale de la imagen pero sin cerrarla, util en el caso de servidores como el de Galaxy
 ```
+
+
+# Instalar el Docker de Microomics
+El primer paso será iniciar el Docker de Microomics en un puerto local, y montando la carpeta de trabajo. Dado que las instacias de Docker son de solo lectura, es necesario exportar los datos en una carpeta compartida.
+
+docker run -d -p 8080:80 -v ~/galaxy_storage/:/export/ maurijlozano/microomics
+
+En este comando, el texto siguiente "~/galaxy_storage/" debe ser reemplazado por la ruta en la cual se guardarán los archivos.
+
+## Configuración e instalación de aplicaciones
+Para instalar paquetes adicionales a la imagen, deberán acceder como administradores. La cuenta de administrador por default es: 
+admin_users: admin@galaxy.org
+password: admin
+Una vez que ingresaron con privilegios de administrador aparecerá la pestaña *admin* en donde podrán seleccionar instalar aplicaciones desde toolshed.
+
