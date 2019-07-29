@@ -81,13 +81,19 @@ exit #Cierra la imagenes
 detach #Sale de la imagen pero sin cerrarla, util en el caso de servidores como el de Galaxy
 ```
 
-
 # Instalar el Docker de Microomics
-El primer paso será iniciar el Docker de Microomics en un puerto local, y montando la carpeta de trabajo. Dado que las instacias de Docker son de solo lectura, es necesario exportar los datos en una carpeta compartida.
+Para descargar el Docker necesario para el curso, ejecutar en terminal (o Powershell si se encuentra en windows) el siguiente comando:
+```
+docker pull maurijlozano/microomics
+```
 
-docker run -d -p 8080:80 -v ~/galaxy_storage/:/export/ maurijlozano/microomics
+## Correr Galaxy/MicroOmics
+El primer paso será iniciar el Docker de Galaxy en un puerto local, y montando la carpeta de trabajo. Dado que las instacias de Docker son de solo lectura, es necesario exportar los datos en una carpeta compartida.
+```
+docker run -d -p 8080:80 -v ruta/a/la/carpeta/de/trabajo:/export/ maurijlozano/microomics
+```
 
-En este comando, el texto siguiente "~/galaxy_storage/" debe ser reemplazado por la ruta en la cual se guardarán los archivos.
+En este comando, el texto siguiente "ruta/a/la/carpeta/de/trabajo" debe ser reemplazado por la ruta en la cual se guardarán los archivos.
 
 ## Configuración e instalación de aplicaciones
 Para instalar paquetes adicionales a la imagen, deberán acceder como administradores. La cuenta de administrador por default es: 
