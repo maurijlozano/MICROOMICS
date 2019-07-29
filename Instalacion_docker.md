@@ -91,7 +91,9 @@ En este comando, el texto siguiente "~/galaxy_storage/" debe ser reemplazado por
 
 ## Configuración e instalación de aplicaciones
 Para instalar paquetes adicionales a la imagen, deberán acceder como administradores. La cuenta de administrador por default es: 
-admin_users: admin@galaxy.org
+
+admin_users: admin@galaxy.org  
 password: admin
+
 Una vez que ingresaron con privilegios de administrador aparecerá la pestaña *admin* en donde podrán seleccionar instalar aplicaciones desde toolshed.
 
