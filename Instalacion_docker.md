@@ -22,7 +22,7 @@ sudo apt-get install \
 
 `sudo apt-key fingerprint 0EBFCD88`
 
-## add docker repository
+## Agregar el repositorio de Docker
 ```
 sudo add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
@@ -30,7 +30,7 @@ sudo add-apt-repository \
    stable"
 ```
 
-## install docker
+## Instalar docker
 `sudo apt-get update`
 
 Instalar la última versión de docker:
