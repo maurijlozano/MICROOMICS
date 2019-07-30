@@ -94,7 +94,7 @@ Para la realización del TP, además de esta guía se pueden mirar los tutoriale
 
 
 # Cargando los datos de secuenciación
-Como ya se vio en la teoría existen diversas tecnologías de secuenciación, a partir de las cuales obtendremos 1 o múltiples archivos, en general, de tipo FASTQ.
+Como ya se vio en la teoría existen diversas tecnologías de secuenciación, a partir de las cuales obtendremos uno o múltiples archivos, en general, de tipo FASTQ.
 Para comenzar el análisis de las secuencias, la primer etapa es cargarlas en el servidor de galaxy. Nosotros ahora estamos trabajando en una instancia local del servidor, por lo que la carga de archivos será rápida. **Recuerden, que si utilizaran el servidor online, según el tamaño de los archivos la carga puede ser lenta, y para archivos grandes (> 2gb) es necesario utilizar un ftp.**
 
 ## Procedimiento
@@ -104,7 +104,7 @@ Recuerde que pueden cargarse múltiples archivos en una sola operación.
 
 ## Colecciones
 Los archivos con las lecturas se pueden organizar en colecciones para simplificar la ejecución de los diferentes programas (procesamiento colectivo), y para organizar de una mejor manera la *historia*.  
-ej. Se cuenta con cuatro archivos correspondientes a un experimento de secuenciación pair-end. Este dataset contiene por lo tanto secuencias forward (directas) y reverse (reversas), que pueden organizarse en colecciones para indicar a los programas los datos que estan pareados (f,r), y que pertenecen a una misma muestra (S1 o S2).  
+ej. Se cuenta con cuatro archivos correspondientes a un experimento de secuenciación paired-end. Este dataset contiene por lo tanto secuencias forward (directas) y reverse (reversas), que pueden organizarse en colecciones para indicar a los programas los datos que estan pareados (f,r), y que pertenecen a una misma muestra (S1 o S2).  
 ```
    Data sets individuales                           Colección
    
