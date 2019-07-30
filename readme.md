@@ -64,6 +64,8 @@ Dicho esto, como **objetivos del trabajo práctico** nos planteamos los siguient
     * Mapear las secuencias a un genoma de referencia
     * Realizar el recuento de secuencias para cada transcripto
     * Realizar el análisis de expresión diferencial
+    
+DATA SETs -> los set de datos que vamos a utilizar se pueden descargar del siguiente [link](http://www.mediafire.com/file/6oq2yk7qkmzjfwy/datasets.tar.gz/file). Los Datos deberían ya estar descargados en las computadoras de la sala, pero los alumnos que utilicen sus notebooks deberán descargar este archivo.    
 
 <a name="id3"></a>
 Día 1 - Obtención de la secuencia genómica un Staphylococcus aureus imaginario que posee un genoma reducido 
@@ -285,7 +287,7 @@ Para secuencias pareadas Trimmomatic devuelve dos resultados, uno en el que ambo
 
 ## Ensamblado de la secuencias utilizando Unicycler
 Unicycler es un ensamblador híbrido para genomas bacterianos. Puede ensamblar lecturas generadas con la plataforma Illumina por medio de SPAdes, pero tambien puede utilizar lecturas largas generadas con PacBio o Nanopore utilizando una tubería *miniasm+Racon*. Para generar el mejor ensamblado, si se dispone de lecturas cortas y largas, unicycler realizará un ensamblado híbrido facilitando la obtención de un genoma cerrado de alta calidad.  
-Para más información mirar la página de [Unicycler](https://github.com/rrwick/Unicycler)
+Para más información mirar la página de [Unicycler](https://github.com/rrwick/Unicycler).
 
 Las opciones son las siguientes:
 * Paired or Single end data?  -> seleccionar el tipo de datos de secuencia
@@ -300,7 +302,7 @@ Las opciones son las siguientes:
 
 El resto de los parámetros se pueden dejar en un principio por defecto. Hay muchos parámetros que corresponden a otros programas utilizados en la tubería, principalmente SPAdes, TBLASTN, Pilon, etc.  
 
-Unicycler generará dos archivos: Final Assembly y Final Assembly Graph
+Unicycler generará dos archivos: Final Assembly y Final Assembly Graph.
 
 
 ## Análisis de la calidad del ensamblado mediante QUAST
@@ -464,139 +466,140 @@ Por cada uno de estos items crearemos un track group, y dentro cargaremos las pi
       * Override Apollo Draggability -> lo dejamos como está
 * General JBROWSE Optional (Advanced) -> lo dejamos como está
 * Plugins -> GC Content -> Acá se puede activar el GC y GC Skew
-   * GC skew es cuando los nucleótidos G o C son más o menos abundantes un una región particular del ADN o ARN. En condiciones de equilibrio (si no hay presiones de seleccion y los nucleótidos están distribuidos al azar) la frecuencia de las cuatro bases en ambas hebras es igual. Sin embargo en la mayoría de las bacterias y algunas arqueas, la composición nucleotídica es asimétrica entre la hebra lider y resagada: la hebra lider contiene en general más G y T. Matematicamente se calcula como -> GC skew = (G - C)/(G + C)
+   * GC skew es cuando los nucleótidos G o C son más o menos abundantes un una región particular del ADN o ARN. En condiciones de equilibrio (si no hay presiones de seleccion y los nucleótidos están distribuidos al azar) la frecuencia de las cuatro bases en ambas hebras es igual. Sin embargo en la mayoría de las bacterias y algunas arqueas, la composición nucleotídica es asimétrica entre la hebra lider y resagada: la hebra lider contiene en general más G y T. Matematicamente se calcula como -> GC skew = (G - C)/(G + C).
 
-
+  
+  
+  
 <a name="id4"></a>
 Día 2: RNAseq 
 -------------
 
-# Introducción
-[Referencia](https://galaxyproject.org/tutorials/rb_rnaseq/)
-[Referencia2](https://galaxy-au-training.github.io/tutorials/modules/dge/#upload-files-to-galaxy)
+## Introducción
+El estudio de RNAseq tiene como principal objetivo obtener la secuencia de los diferentes RNAs de un organismo, con principal interes en los los RNAs mensajeros (obtención del tranascriptoma). Adicionalmente, es de interés conocer la abundancia relativa de los mismos y como varía su expresión en diferentes condiciones de crecimiento, tejidos, o variantes genómicas.
+En los siguientes enlaces encontrará información de utilidad para la realización del análisis de datos de RNAseq con Galaxy [1](https://galaxyproject.org/tutorials/rb_rnaseq/) [2](https://galaxy-au-training.github.io/tutorials/modules/dge/#upload-files-to-galaxy).
 
-En este caso, las lecturas que utilizaremos corresponden a *E. coli*, creciendo en dos medios de cultivo diferentes. El set de datos, es una versión reducida al 1% para acortar los tiempos de cálculo, tomada de [Galaxy Australia Training - RNA-Seq: Bacteria - Autor: Syme, Anna](https://doi.org/10.5281/zenodo.1311269). 
-
-
-Existen dos métodos principales, los basados en genomas de referencia, o los independientes de genoma de referencia. En este último caso se ensamblan las lecturas en transcriptos usando métodos *de novo*.
-
+En este caso, las lecturas que utilizaremos corresponden a *Escherichia coli*, creciendo en dos medios de cultivo diferentes. El set de datos, es una versión reducida al 1% para acortar los tiempos de cálculo, tomada de [Galaxy Australia Training - RNA-Seq: Bacteria - Autor: Syme, Anna](https://doi.org/10.5281/zenodo.1311269). 
+  
+Existen dos métodos principales, los basados en genomas de referencia, o los independientes de genoma de referencia. En este último caso se ensamblan las lecturas en transcriptos usando métodos *de novo*. En el trabajo práctico solo nos dedicaremos a los métodos basados en un genoma de referencia.
+  
 En lineas muy generales el protocolo experimental cumple con los siguientes pasos:
 1. Purificación de RNA
 2. Transcripción reversa -> Generación del cDNA
 3. Síntesis de la segunda cadena utilizando una DNA polimerasa
 4. Preparación de una biblioteca de secuenciamiento
 
-Las etapas anteriores omiten muchas consideraciones experimentales que en algunos casos son necesarios. Sin embargo, entre estos hay dos que describiremos por su importancia:
+Las etapas anteriores omiten muchas consideraciones experimentales que en algunos casos son necesarias. Sin embargo, entre estas hay dos que describiremos a continuación por su importancia:
 
-## Síntesis de la primera cadena.
+### Síntesis de la primera cadena.
 Como la transcriptasa reversa requiere un oligonucleótido que actúe como cebador, según como se elige este cebador tendremos diferentes aproximaciones experimentales.
 Por ejemplo, para Eucariotas es común utilizar como cebador oligo-dT, ya que los mRNAs procesados están poliadenilados.
 Otra estrategia muy utilizada es utilizar oligonucleótidos de secuencia aleatoria (random priming) que permitirán la transcripción reversa en múltiples sitios internos.
 
-## RNAseq específico de hebra (Strand-specific)
-Los RNAs son de una sola cadena y por consiguiente tienen polaridad. En los experimentos mas típicos de RNAseq la polaridad se pierde ya que se construye una biblioteca a partir del DNA doble cadena. Existen diversos métodos para generar una biblioteca strand-specific, que involucran en general la ligación de adaptadores en los extremos del RNA (los más comunes son Illumina TrueSeq RNAseq kits and dUTP tagging).
+### RNAseq específico de hebra (Strand-specific)
+Los RNAs son de una sola cadena y por consiguiente tienen polaridad. En los experimentos mas típicos de RNAseq la polaridad se pierde ya que se construye una biblioteca a partir del DNA doble cadena. Existen diversos métodos para generar una biblioteca específica de hebra (strand-specific), que involucran en general la ligación de adaptadores en los extremos del RNA (los más comunes son Illumina TrueSeq RNAseq kits y dUTP tagging).
 
-Dependiendo del método utilizado, tenemos que tener cuidado de como interpretar los datos. En general una inspección visual de las lecturas mapeadas puede darnos información sobre el tipo de biblioteca que tenemos.
-(En rojo -> lecturas mapeadas directas)
-(En azul -> lecturas mapeadas en RC)
+Dependiendo del método utilizado, tenemos que tener cuidado de como interpretar los datos. En general una inspección visual de las lecturas mapeadas puede darnos información sobre el tipo de biblioteca que tenemos. (Utilizando JBROWSE, En rojo -> lecturas mapeadas directas, En azul -> lecturas mapeadas en RC)
  
-# Ya tenemos nuestras secuencias. y ahora?
-El procesamiento en términos generales implica:
+## Procesamiento de las Secuencias
+El procesamiento en términos generales implica:  
 1. Determinación de calidad de las lecturas
 2. Filtrado y cortado de adaptadores
 3. Mapeo contra el genoma de referencia 
-    * Acá, tenemos que tener en cuanta si el organismo en estudio es pro- o eucariota. En el caso de organismos eucariotas tendremos que tener en cuenta el que as secuencias solo mapearán en los exones, y algunas de ellas atravesarán de un exón a otro. En estos casos se utilizan *spliced mappers* como TopHat, HiSat y STAR.
+    * Acá, tenemos que tener en cuenta si el organismo en estudio es pro- o eucariota. En el caso de organismos eucariotas tendremos que tener en cuenta el que as secuencias solo mapearán en los exones, y algunas de ellas atravesarán de un exón a otro. En estos casos se utilizan *spliced mappers* como TopHat, HiSat y STAR.
 4. Reconstrucción del transcriptoma
-    * En esta etapa, las lecturas mapeadas al genoma y con las uniones de exones, son utilizadas para construir modelos de transcriptoma (Splicing alternativos). Existen distintas herramientas, una de las más utilizadas es cufflinks (y ahora del mismo grupo Stringtie). Nuevamente, esto no será necesario para el análisis del transcriptoma de procariotas.
+    * En esta etapa, las lecturas mapeadas al genoma y las uniones de exones, son utilizadas para construir modelos de transcriptoma (Splicing alternativos). Existen distintas herramientas, una de las más utilizadas es cufflinks (y ahora del mismo grupo, Stringtie). Nuevamente, esto no será necesario para el análisis del transcriptoma de procariotas.
 5. La siguiente etapa es la cuantificación de los transcriptos. 
     * Esto implica asignar las lecturas a los transcriptos. En este punto, Cufflinks (Stringtie) ya tienen la información sobre que lecturas mapean contra cada transcripto, por lo que solo resta contarlas! Stringtie, adicionalmente realiza la cuantificación.
     * Existen otras herramientas que mapean directamente las lecturas al transcriptoma, asumiendo que existe un transcriptoma de buena calidad para el organismo en cuestión (en general se usa en humanos o ratón; Sailfish, Kallisto, Salmon)
-    * El recuento de las lecturas asociadas a cada transcripto en general es una muy mala aproximación a la cantidad de transcripto, esto se debe distintos factores, principalmente el largo del transcripto. Por ende, los recuentos deben ser normalizados. Existen distintos métodos de normalización:
+    * El recuento de las lecturas asociadas a cada transcripto en general es una *muy mala aproximación* a la cantidad de transcripto, esto se debe distintos factores, principalmente el **largo del transcripto**. Por ende, los recuentos deben ser normalizados. Existen distintos métodos de normalización:
     * Normalización dentro de una misma muestras (RPKM, FPKM, TPM, rlog)
     * Normalización entre muestras
 6. Análisis de expresión diferencial
-    * Es importante tener en cuanta que los valores normalizados anteriormente no deben compararse entre condiciones para determinar el el grado de expresión diferencial. Con este objetivo existen herramientas específicas que calcualrán la magnitud del cambio y su significancia estadística, teniendo en cuenta, si existe, la información de las réplicas biológicas.
+    * Es importante tener en cuanta que los valores normalizados anteriormente no deben compararse directamente entre condiciones para determinar el el grado de expresión diferencial. Con este objetivo existen herramientas específicas que calcualrán la magnitud del cambio y su significancia estadística, teniendo en cuenta, si existe, la información de las réplicas biológicas.
     * Las mejores aplicaciones para realizar el análisis diferencial son edgeR, DESeq/DESeq2, y limma-voom.
 
-# Generar las colecciones
-En este caso nos va a interesar generar dos colecciones, una para las lecturas correspondientes a E. coli* crecida en medio LB y otra para las correspondientes a *E. coli* crecidas en medio MG.
-Adicionalmente, podemos crear una colección con todas las lecturas para hacer el control de calidad.
+## Generar las colecciones
+En este caso nos va a interesar generar una colección con todas las lecturas, tanto las correspondientes a E. coli* crecida en medio LB y como las correspondientes a *E. coli* crecidas en medio MG. Más adelante, si es necesario, estas se podran separar utilizando las herramientas para colecciones.
 
-# Determinar la calidad de las lecturas - FastQC / filtrados y recortes (Trimmomatic)
+## Determinar la calidad de las lecturas - FastQC / filtrados y recortes (Trimmomatic)
 Igualmente que en el caso anterior, es importante verificar la calidad de las lecturas obtenidas y realizar los filtrados y recortes necesarios.
-* Correr el FastQC en la colección con todas las lecturas
+* Correr el FastQC en la colección con todas las lecturas. Esto lo haremos para las dos colecciones generadas anteriormente.
 * Correr el MultiQC con los resultados de FastQC
 * Analizar los datos
+* Correr Trimmomatic para eliminar secuencias con baja calidad.
+* Volver a analizar los datos con FastQC para ver la calidad de los datos procesados.
 
-# Genoma de referencia
-El genoma de referencia es el de *E. coli* K12. Además de la secuencia en formato fasta tenemos las anotaciones de transcriptos en formato gtf. Para la visualización con JBROWSE utilizaremos el formato GFF, por lo que será mecesario convertir el archivo .gtf a .gff. Para ello utilizaremos la aplicación GTF2GFF.
+## Genoma de referencia
+El genoma de referencia es el de *E. coli* K12. Además de la secuencia en formato fasta tenemos las anotaciones de transcriptos en formato GTF. Para la visualización con JBROWSE utilizaremos el formato GFF, por lo que será mecesario convertir el archivo .gtf a .gff. Para ello utilizaremos la aplicación GTF2GFF. 
+* Convert this query -> Acá deberemos seleccionar el archivo GTF. 
+   * Si no sale el archivo, verificar que haya sido correctamente identificado como tipo GTF. Si fue identificado como GFF, hacer click en el icono del lápiz (edición) -> datatype -> buscar el formato GTF y presionar *change datatype*.
 
-# Mapeo de secuencias en contra un genoma de referencia
-El mapeo es el proceso mediante el cual las lecturas se alinean a un genoma de referencia. Los programas para realziar el mapeo toman como input un genoma de referencia y los sets de lecturas. El objetivo es alinear cada lectura en los archivos fastq en el genoma de referencia, permitiendo algunos errores (mismatches), indels (deleciones o inserciones) y el cortado de algunos fragmentos cortos en los extremos de las lecturas-
-En la actualidad hay mas de 60 programas diferentes para realizar el mapeo, y el número sigue creciendo. En el trabajo práctico utilizaremos algunos de los más comunes como el Bowtie2, o el BWA.
+## Mapeo de secuencias en contra un genoma de referencia
+El mapeo es el proceso mediante el cual las lecturas se alinean a un genoma de referencia. Los programas para realziar el mapeo toman como input un genoma de referencia y los sets de lecturas. El objetivo es alinear cada lectura en los archivos fastq en el genoma de referencia, permitiendo algunos errores (mismatches), indels (deleciones o inserciones) y el cortado de algunos fragmentos cortos en los extremos de las lecturas.
+En la actualidad hay mas de 60 programas diferentes para realizar el mapeo, y el número sigue creciendo. En el trabajo práctico utilizaremos algunos de los más comunes como el **Bowtie2**, o el BWA.
 
-## Mapeo de las lecturas obtenidas
+### Mapeo de las lecturas obtenidas
 Como las lecturas que tenemos provienen de un estudio de RNAseq de procariotas, no es necesario que realicemos un mapeo que tenga en cuenta splicing. Por ello realizaremos el mapeo con Bowtie2. **Recordar seleccionar la opción para que reporte la estadística del mapeo**. Adicionalmente, no será necesario realizar la reconstrucción del transcriptoma.
 
-## Bowtie2
-Para ejecutar el mapeador Bowtie2, necesitamos el genoma de referencia contra el cual alinear las lecturas. Para ello debemos cargar los archivos fasta en la historia. Es recomendable además agregarlo a un *custom build*, que es la forma que usan la mayoría de las aplicaciones para seleccionar genomas de referencia.
+### Bowtie2
+Para ejecutar el mapeador Bowtie2, necesitamos el genoma de referencia contra el cual alinear las lecturas. Para ello debemos cargar los archivos fasta en la historia.
 
 El programa Bowtie2 toma los siguientes argumentos:
-Ejemplo para lecturas de un experimento paired-end.
-1. “Is this single or paired library”: Paired-end
-        param-file “FASTA/Q file #1”: 
-        param-file “FASTA/Q file #2”: 
+Ejemplo para lecturas de un experimento RNAseq. Solo describiremos los parámetros que ajustaremos a nuestros datos.
 
-2. “Do you want to set paired-end options?”: No
-        Acá se pueden configurar varios parámetros, en especial la orientacion de los pares.  
-3. “Will you select a reference genome from your history or use a built-in index?”: 
-        “Select reference genome”: 
+* Is this single or paired library -> single-end
+   * FASTA/Q file -> seleccionar el archivo/colección
 
-4. “Select analysis mode”: Default setting only
-    They can have an impact on the mapping and improving it.
-5. “Save the bowtie2 mapping statistics to the history”: **Yes**
-    * Esta opción es importante, nos va a permitir mirar la estadística del mapeo.
-6. Inspeccionar los resultados del mapeo clickeando en el icono **galaxy-eye**
+* Will you select a reference genome from your history or use a built-in index? -> genome from your history
+   * Select reference genome -> seleccionar el genoma de referencia
 
-Es interesante notar que algunas lecturas pueden ser mapeadas en varias posiciones (multi-mapped reds), estas en general corresponden a repeticiones en el genoma de referencia y son más abundantes cuando el largo de lectura es chico. Como es dificil determinar de donde provienen esas lecturas la mayoría de los mapeadores las ignoran.
+* Select analysis mode -> Default setting only
+* Save the bowtie2 mapping statistics to the history -> **Yes**
+   * Esta opción es importante, nos va a permitir mirar la estadística del mapeo.
+* Inspeccionar los resultados del mapeo clickeando en el icono **galaxy-eye**
+
+Es interesante notar que algunas lecturas pueden ser mapeadas en varias posiciones (multi-mapped reads), estas en general corresponden a repeticiones en el genoma de referencia y son más abundantes cuando el largo de lectura es chico. Como es dificil determinar de donde provienen esas lecturas la mayoría de los mapeadores las ignoran.
 Otra información de interés es el porcentaje de lecturas no mapeadas, estas pueden deberse a: un par de lecturas que alinean en diferentes regiones genómicas, lecturas multimapeadas y a lecturas que no alinean en nungún lugar. 
 
-### Causa de errores...
+#### Causa de errores...
 1. Artefactos de amplificación por PCR
 2. Errores de secuenciación (en general son al azar, por lo que en análisis de variaciones se pueden evidenciar como ssingletones)
 3. Erroes de mapeo ( en general en el entorno de regiones repetidas)
 
-## Archivos SAM/BAM
+### Archivos SAM/BAM
 El resultado de los alineamientos es un archivo BAM (Binary Alignment Map). El formato BAM, es un formato comprimido que contiene las secuencias que mapearon contra el genoma de referencia. Los archivos BAM están además acompañados de un índice .bai. 
 Los archivos SAM, Sequence Alignment/Map, son la versión leible de los archivos BAM. Son archivos de texto, con campos separados por tabulaciones, que contienen la información del alineamiento.
-La estructura es la de una tabla, con un header (encabezado) y a continuación los datos del alineamiento.
+La estructura es la de una tabla, con un **header (encabezado)** y a continuación los datos del **alineamiento**.
 
-### Encabezados
+#### Encabezado
 El encabezado contiene información de como el alineamiento fue obtenido. Todas las lineas comienzan con un @XX y pares tag:valor delimitados por tabulaciones.
-Existen distintos tipos de datos, por ejemplo filas comenzando con @SQ, contienen información acerca de las secuencias del genoma de referencia. Otros identificadores son @RG (read group), @PG (program).
-Mas info en las especificaciones del formato [SAM](http://samtools.github.io/hts-specs/SAMv1.pdf)
+Existen distintos tipos de datos, por ejemplo, filas comenzando con @SQ, contienen información acerca de las secuencias del genoma de referencia. Otros identificadores son @RG (read group), @PG (program).
+Mas info en las especificaciones del formato [SAM](http://samtools.github.io/hts-specs/SAMv1.pdf).
 
-### Alineamiento
-Col 	Field 	Type 	Brief Description
-1 	QNAME 	String 	Nombre de la secuencia (PE: o del par de lecturas)
-2 	FLAG 	Integer bitwise FLAG: da información sobre el mapeo. Ver abajo
-3 	RNAME 	String 	Nombre de la secuencia de referencia
-4 	POS 	Integer	La posición más a la izquierda de la 1-base mapeada (0 si no mapeo)
-5 	MAPQ 	Integer	MAPping Quality (Phred)
-6 	CIGAR 	String 	CIGAR String (Información detallada del alineamiento)
-7 	RNEXT 	String 	Solo en PE. nombre de la secuencia de referencia del alineamiento del mate(next read)
-8 	PNEXT 	Integer	Solo en PE. La posición más a la izquierda de la 1-base mapeada del  mate(next read)
-9 	TLEN 	Integer	Solo en PE. Largo inferido del fragmento
-10 	SEQ 	String 	Secuencia sin indels de hebra directa de la lectura alineada
-11 	QUAL 	String 	ASCII Phred-scaled base QUALity+33
-12	OPT	depende Campos opcionales. TA,Tipo, ver abajo.
+#### Alineamiento
+
+Col 	Field 	Type   	Brief Description
+1     QNAME 	String   Nombre de la secuencia (PE: o del par de lecturas)
+2     FLAG   	Integer  bitwise FLAG: da información sobre el mapeo. Ver abajo
+3     RNAME  	String 	Nombre de la secuencia de referencia
+4     POS    	Integer	La posición más a la izquierda de la 1-base mapeada (0 si no mapeo)
+5     MAPQ   	Integer	MAPping Quality (Phred)
+6     CIGAR 	String 	CIGAR String (Información detallada del alineamiento)
+7     RNEXT 	String 	Solo en PE. nombre de la secuencia de referencia del alineamiento del mate(next read)
+8     PNEXT    Integer	Solo en PE. La posición más a la izquierda de la 1-base mapeada del  mate(next read)
+9     TLEN 	   Integer	Solo en PE. Largo inferido del fragmento
+10    SEQ 	   String 	Secuencia sin indels de hebra directa de la lectura alineada
+11    QUAL 	   String 	ASCII Phred-scaled base QUALity+33
+12    OPT   	depende  Campos opcionales. TA,Tipo, ver abajo.
 
 *Ej.*
 <QNAME> <FLAG> <RNAME> <POS> <MAPQ> <CIGAR> <RNEXT> <PNEXT> <TLEN>    <SEQ>       <QUAL>     <OPT>
 read1     83     chrI  15364   30      51M     =     15535   232    CCA..CTCG     BB?H..    NM:i:0
 
-### El campo **flag**
-El campo flag codifica en un número diferente información sobre la lectura. El número se genera a partir de asignar 0 (No) o 1(Si) a distintas características de la lectura.
+
+#### El campo **flag**
+El campo flag codifica en un número diferente información sobre la lectura. El número se genera a partir de asignar 0 (No) o 1 (Si) a distintas características de la lectura.
 Ej.
 Binario     dec   Hex   Descripción
 00000000001    1 -> 0x1   Es la lectura pareada? 0 -> No 1 -> SI
@@ -616,7 +619,7 @@ Los números se suman para generar un código decimal. Ej.
 flag 69 -> (= 1 + 4 + 64) lectura pareada, primera del par y no mapeo.
 Para ver los diferentes flags es útil la siguiente página: [Flags](https://broadinstitute.github.io/picard/explain-flags.html)
 
-### El campo **CIGAR**
+#### El campo **CIGAR**
 CIGAR viene de **"Concise Idiosyncratic Gapped Alignment Report"**. Contiene información sobre las operaciones que tuvieron que hacerse para poder mapear la secuencia.
 Las operaciones son las siguientes:
 * M - Alineamiento (puede ser match o mismatch)
@@ -633,100 +636,85 @@ La suma de todos los simbolos debe ser igual al largo de la lectura. Ej.
 Referencia  A**GATAGCTG   CIGAR        Explicación
 lectura     AAGGATA*CTG   1M2I4M1D3M   1 match, 2 inserciones, 4 matches, 1 deleción y 3 matches! 
 
-### Los opcionales!
+#### Los opcionales!
 Los campos opcionales se incluyen en el último campo del BAM, con la sintaxis: <TAG>:<TYPE>:<VALUE>
 Donde type puede ser de las siguientes clases: A - Character, i - Integer, f - Float number, Z - String, H - Hex string.
 La etiqueta varía según el ensamblador, pueden ser: AS (alignment score), BC (Barcode sequence), HI (cual es la primer posición de la lectura que alinea), NH (Número de alineamientos para la secuencia), NM (distancia de la secuencia a la referencia, es 0 si son idénticas), MD (Posición exacta de los mismatches) y RG (Read Group).
 Los Tags comenzando con X, Y y Z no están estandarizadas. Por ejemplo XS, es usada por TopHat para indicar la hebra, mientras que el mismo tag es usado por BWA y Bowtie2 para guardar el score del mejor alinemiento, en casos de lecturas que mapean en sitios múltiples.
 
-### Otra opción BWA / BWA-MEM (No instalado)
+#### Otra opción BWA / BWA-MEM (No instalado)
 Otro mapeador altamente utilizado es BWA. 
- 
-### MPileup
-samtools mpileup -> para generar la secuencia consenso del secuenciamiento!
-Example
-Sequence	Position	Reference Base	Read Count	Read Results	Quality
-```
-seq1	272	T	24	,.$.....,,.,.,...,,,.,..^+.	<<<+;<<<<<<<<<<<=<;<;7<&
-seq1	273	T	23	,.....,,.,.,...,,,.,..A	<<<;<<<<<<<<<3<=<<<;<<+
-seq1	274	T	23	,.$....,,.,.,...,,,.,...	7<7;<;<<<<<<<<<=<;<;<<6
-seq1	275	A	23	,$....,,.,.,...,,,.,...^l.	<+;9*<<<<<<<<<=<<:;<<<<
-seq1	276	G	22	...T,,.,.,...,,,.,....	33;+<<7=7<<7<&<<1;<<6<
-seq1	277	T	22	....,,.,.,.C.,,,.,..G.	+7<;<<<<<<<&<=<<:;<<&<
-seq1	278	G	23	....,,.,.,...,,,.,....^k.	%38*<<;<7<<7<=<<<;<<<<<
-seq1	279	C	23	A..T,,.,.,...,,,.,.....	75&<<<<<<<<<=<<<9<<:<<<
-```
-The columns
-Each line consists of 5 (or optionally 6) tab-separated columns:
 
-Sequence identifier
-Position in sequence (starting from 1)
-Reference nucleotide at that position
-Number of aligned reads covering that position (depth of coverage)
-Bases at that position from aligned reads
-Phred Quality of those bases, represented in ASCII with -33 offset (OPTIONAL)
-Column 5: The bases string
+### Para analizar los resultados de todas las lecturas utilizar MultiQC.
+Los resultados del mapeo se pueden visualizar utilizando MultiQC, siempre y cuando se haya seleccionado que Bowtie2 genere el archivo de estadística.
 
-```
-. (dot) means a base that matched the reference on the forward strand
-, (comma) means a base that matched the reference on the reverse strand
-</> (less-/greater-than sign) denotes a reference skip. This occurs, for example, if a base in the reference genome is intronic and a read maps to two flanking exons. If quality scores are given in a sixth column, they refer to the quality of the read and not the specific base.
-AGTCN denotes a base that did not match the reference on the forward strand
-agtcn denotes a base that did not match the reference on the reverse strand
-A sequence matching the regular expression \+[0-9]+[ACGTNacgtn]+ denotes an insertion of one or more bases starting from the next position
-A sequence matching the regular expression -[0-9]+[ACGTNacgtn]+ denotes a deletion of one or more bases starting from the next position
-^ (caret) marks the start of a read segment and the ASCII of the character following `^' minus 33 gives the mapping quality
-$ (dollar) marks the end of a read segment
-* (asterisk) is a placeholder for a deleted base in a multiple basepair deletion that was mentioned in a previous line by the -[0-9]+[ACGTNacgtn]+ notation
-Column 6: The base quality string
-This is an optional column. If present, the ASCII value of the character minus 33 gives the mapping Phred quality of each of the bases in the previous column 5. This is similar to quality encoding in the FASTQ format.
-```
+### Visualizar en JBrowse
+Para visualizar las secuencias mapeadas sobre el genoma de referencia se puede utilizar el progrma JBROWSE. Acá hay que agregar las pistas del genoma con su anotación y los archivos SAM del mapeo (Ver Día 1).
+Mirando los resultados, tratar de determinar si nuestras secuencias vienen de una biblioteca de tipo **'stranded'**. *Recordar que en rojo se muestran las lecturas que alinearon en la hebra directa y en azul las que alinearon en la hebra complementaria*.  
 
-###Convert, Merge, Randomize BAM tools. 
-Convert to fasta!
-
-## Para analizar los resultados de todas las lecturas utilizar MultiQC.
-Los resultadosd el mapeo se pueden visualizar utilizando MultiQC, siempre y cuando se haya seleccionado que Bowtie2 genere el archivo de estadística.
-
-## Visualizar en JBrowse
-Para visualizar las secuencias mapeadas sobre el genoma de referencia se puede utilizar el progrma JBROWSE (entre otros). Acá hay que agregar las pistas del genoma con su anotación y de los archivos SAM del mapeo.
-Mirando los resultados, tratar de determinar si nuestras secuencias vienen de una biblioteca 'stranded'.
-
-### Otra opción IGV
+#### Otra opción IGV
 Para cargar genomas de referencia en IGV, los mismos tienen que estar indexados. Para generar el índice hay que abrir el fasta de referencia y entrar en la opción de edición (click en el lápiz). Dentro, elegir convertir, y seleccionar fai.
 Se puede despues abrir el IGV online y cargar los archivos de la referencia (fas,fai) y del alineamiento (bam,bai).
 
-# Recuento y análisis de expresión diferencial de secuencias que mapean en cada transcripto
-Utilizaremos el programa featurecounts (o htseq-count)
+## Recuento y análisis de expresión diferencial de secuencias que mapean en cada transcripto
+### Utilizando el programa htseq-count
+* Aligned SAM/BAM File -> seleccionar la colección de BAM generada por Bowtie2
+* GFF File -> Archivo de anotación de *E. coli*.
+* Mode -> Existen diferentes modos para realziar el recuento cuando las lecturas se solapan con más de un feature. Usaremos el modo de Union.
+* Stranded -> Yes (Como determinamos previamente, o según nuestro protocolo experimental)
+* Minimum alignment quality -> defecto 10
+
+Los siguientes campos dependen del archivo GFF y hay que mirarlos con cuidado para que funcione!  
+* Feature type -> exon (en general está ok)
+* ID Attribute -> Hay que ver en el archivo GFF, columna Group cual es el campo con el nombre del feature, en nuestro caso *Parent*. 
+* Set advanced options -> dejamos sin cambiar.
+
+
+### También se puede utilizar el programa featurecounts...
 En opciones hay que elegir:
 * Alignment file -> Alineamiento hecho con Bowtie2 (SAM/BAM)
-* Specify strand information -> Stranded (Forward)
+* Specify strand information -> Stranded (Forward en nuestro caso)
     * Esto se puede ver a partir de los resultados del alineamiento con Bowtie2, o con el protocolo utilizado para obtener las lecturas.
-* Gene annotation file	-> history -> Ecoli_k12.gtf
+* Gene annotation file	-> seleccionar el archivo GFF
+En este caso en los parámetros avanzados hay que especificar 
+* GFF feature type filter -> *exon*
+* GFF gene identifier -> *Parent*
+El resto lo dejamos como está...
 
-## Inspección de los resultados utilizando el Scratchbook! 
+### Inspección de los resultados utilizando el Scratchbook! 
 El icono a la derecha de User en la barra superior, es el Scratchbook, cuando está activado nos permite ver resultados de varios análisis de forma simultánea!
 Utilizar el Scratchbook para visualizar los resultados de featurecounts!
 
-# Análisis de expresión diferencial
-Aca hay que tener las listas correspondientes a cada condición..
-Si tenemos una lista única se puede separar usando: Apply Rule to Collection
+## Análisis de expresión diferencial
+Aca hay que tener las listas correspondientes a cada condición, o los datos de forma individual..  
+Si tenemos una lista única se puede separar usando: Apply Rule to Collection.  
 * Agregar filtrado, por expresión regular -> Lb (en un caso y en el otro MG)
-* Agregar definición de columna -> 'column definition' -> List identifier
+* Agregar definición de columna -> 'column definition' -> List identifier -> columna A
+La idea es obtener una colección LB_counts y otra MG_counts que utilizaremos a continuación en Deseq2.  
 
-## Deseq2
+### Deseq2
 Para realiar el análisis de expresión diferencial utilizaremos el programa Deseq2.
 Pasos:
-* “how” -> Select datasets per level
-    *En factor” -> “1: Factor” -> “Specify a factor name”: por ejemplo 'Treatment'
-    *En “Factor level” -> “1: Factor level” -> “Specify a factor level”: por ejemplo 'LB'
-    * Counts file(s) Acá hay que seleccionar los datasets
-    *En “2: Factor level” -> “Specify a factor level”: por ejemplo 'MG'
-    * Counts file(s) -> Acá hay que seleccionar los datasets
-* “Files have header?”: YES
+* how -> Select datasets per level
+   * Factor -> Specify a factor name: por ejemplo 'Treatment'
+   * Factor level -> 1:Factor level -> Specify a factor level: por ejemplo 'LB'
+      * Counts file(s) -> Acá hay que seleccionar los datasets
+   * Factor level -> 2:Factor level -> Specify a factor level: por ejemplo 'MG'
+      * Counts file(s) -> Acá hay que seleccionar los datasets
+* Files have header?: YES (para featurecounts) / No (para htseq-count)
+* Choice of Input data -> count data
 * “Output normalized counts table”: Yes
+El resto de los parámetros los dejamos como están.  
 
 Como resultado obtendremos una tabla y varias figuras, incluyendo:
+* Tabla con los resultados del análisis de expresión diferencial, con los siguientes campos:
+   * GeneID	
+   * Base mean	-> el promedio normalizado del recuento en todas las condiciones
+   * log2(FC)	-> el M-value
+   * StdErr	-> el error estandard del M-value
+   * Wald-Stats	
+   * P-value	-> p-value de la significancia estadística de la diferencia observada
+   * P-adj -> p-value ajustado por el procedimiento de Benjamini-Hochberg que controla el false discovery rate (FDR), que es la probabilidad de falsos positivos
 * PCA (Principal component analysis) de las muestras: Sirve para analizar que tan similares son las muestras entre si. Es esperables que las diferentes condiciones estén separadas y las réplicas se encuentren cercanas entre si.
 * Heatmap y  clustering jerárquico de las muestras: Similar al anterior, es una representación de las distancias entre las muestras basado en el logFC para cada gen.
 * Dispersion estimates: la raíz cuadrada de la dispersión es el coeficiente de variación biológica (biological coefficient of variation - BCV), que es una estimación de la variabilidad entre réplicas biológicas. Por ejemplo: si la dispersión estimada es 0.19 -> BCV = 0.44 -> lo que quiere decir que la variación de expresión entre réplicas biológicas es de 44%.
@@ -734,38 +722,42 @@ El BCV representa la variabilidad relativa que uno observaría si pudiera medir 
 * Histograma de p-values: distribución de p-values en la muestra.
 * MA−plot for Condition: LB vs MG: El gráfico de M.value -> logFC, versus la intensidad de la señal (recuentos normalizados). Con puntos rojos, los genes con un p-value significativo.
 
-## Heatmap2
-Crear un heatmap para los genes. Podemos hacer un heatmap para tratar de ver genes con comportamiento similar en base a los recuentos normalizados. Este gráfico lo vamos a hacer solo para los genes con una diferencia estadisticamente significativa.
-
-
-1. Usando: Filter -> Filtrar los resultados de Deseq2 en base al adj-pvalue
-    *param-text “With following condition”: c7 < 0.01
-    *param-text “Number of header lines to skip”: 0
+### Crear un heatmap para los genes usando Heatmap2
+Podemos hacer un heatmap para tratar de ver genes con comportamiento similar en base a los recuentos normalizados. Este gráfico lo vamos a hacer solo para los genes con una diferencia estadisticamente significativa.
+* Usando: Filter -> Filtrar los resultados de Deseq2 en base al adj-pvalue
+    * With following condition: c7 < 0.01 *donde c7 es la columna que contiene el p-value adj*
+    * Number of header lines to skip: 0
         * Luego, podríamos quedarnos, por ejemplo, con los 100 genes con mayor diferencia significativa utilizando la función Sort. Esto no será necesario en nuestro caso por que tenemos menos de 100 genes expresados diferencialmente.
-    *Bajar la tabla filtrada y agregar los headers!
-2. Ahora necesitamos cruzar los datos entre la tabla de recuentos normalizados y la tabla de resultados de Deseq2. Esto se puede hacer utilizando la función Join.
-    * Join user data: 'data_set1' using column c
-    * with user data: 'data_set2' using column c' 
-3. Recortar los datos necesarios para el heatmap. Para ello utilizamos la función cut.
-    * Cut columns -> columnas separadas por coma: c1,c2,c3
-    * Delimited by -> delimitador de campos: tab
-4. Heatmap2
+    * Bajar la tabla filtrada y agregar los headers!
+    * Subir la tabla con la herrramienta upload
+
+Para el Heatmap que queremos crear necesitamos una tabla con los recuentos normalizados de todas las muestras y para los genes seleccionados como diferencialmente expresados. Para esto tenemos que extraer de la tabla de recuentos normalizados las entradas correspondientes a los IDs de la tabla de expresión diferencial de Deseq2.
+
+*  Esto se puede hacer utilizando la función **Compare two Datasets**  
+   * join -> seleccionar la tabla de recuentos normalizados
+      * using column -> 1
+   * with -> seleccionar tabla filtrada con encabezados
+      * using column -> 1
+   * Keep lines of first input that do not join with second input -> No
+   * Keep lines of first input that are incomplete -> No
+   * Fill empty columns -> No
+   * Keep the header lines -> Yes
+
+Ahora nos quedamos con las primeras 7 columnas
+* Cut columns from a table (Galaxy Version 1.0.2)
+   * Cut columns -> c1,c2,c3,c4,c5,c6,c7
+   * Delimited by -> tab
+
+Con la tabla generada podemos crear el Heatmap!  
+* Heatmap2
     * Coloring groups -> blue->white->red
     * Data scaling -> by row
 
-## Otros analisis
-## Degust -> Web
+### Otros analisis
+### Degust -> Web
 Para correr el servidor Degust, deberán bajar la tabla generada por el Deseq2.
 Esta herramienta online genera una serie de figuras de interés.
 
-
-# Extra -> Read Groups
-Los read groups son útiles para combinar múltiples alinemientos en un solo archivo, sin perder la información acerca de la muestra de la cual provienen. Los read groups se agregan al header del archivo SAM, con @RG seguido de los tags correspondientes. Si hay más de un RG, entonces habrá varias lineas con @RG.
-Los tags mas usados son los siguientes:
-* ID, requerido, Id del grupo, en general corresponde a la celda del Illumina, el número y nombre de la calle. Las lecturas en un mismo read group, se asumen de la misma corrida y por ende tienen el mismo error. Este tag tiene que coincidir con el tag RG, de las entradas del archivo BAM.
-* SM, requerido, Id de la Muestra. Todas las lecturas con el mismo SM, corresponden a la misma muestra.
-* PL, tag correspondiente a la tecnología de secuenciación utilizada para generar las lecturas.
-* LB, Identidad de la preparación de ADN. Es utilizado por MarkDuplicates para determinar que grupos podrían tener duplicados, en el caso en que se hallan usado muchas calles. 
 
 
  
