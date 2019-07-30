@@ -75,7 +75,7 @@ Las lecturas corresponden a un experimento de secuenciación con Illumina de una
 Los sets de datos provistos por Unicycler poseen tanto secuencias largas como cortas, pero se requiere mucho más tiempo para realizar el ensamblado.  
 
 # Iniciar Galaxy docker
-El prmier paso será iniciar el Docker de Galaxy en un puerto local, y montando la carpeta de trabajo. Dado que las instacias de Docker son de solo lectura, es necesario exportar los datos en una carpeta compartida.
+El primer paso será iniciar el Docker de Galaxy en un puerto local, y montando la carpeta de trabajo. Dado que las instacias de Docker son de solo lectura, es necesario exportar los datos en una carpeta compartida.
 
 `docker run -d -p 8080:80 -v ~/galaxy_storage/:/export/ maurijlozano/microomics`
 
