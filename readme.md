@@ -74,7 +74,7 @@ Las lecturas corresponden a un experimento de secuenciación con Illumina de una
 * Si desea utilizar otros set de datos revise la siguiente dirección. [Enlace](https://github.com/maurijlozano/MICROOMICS/blob/master/datos_alternativos.md)  
 Los sets de datos provistos por Unicycler poseen tanto secuencias largas como cortas, pero se requiere mucho más tiempo para realizar el ensamblado.  
 
-# Iniciar Galaxy docker
+## Iniciar Galaxy docker
 El primer paso será iniciar el Docker de Galaxy en un puerto local, y montando la carpeta de trabajo. Dado que las instacias de Docker son de solo lectura, es necesario exportar los datos en una carpeta compartida.
 
 `docker run -d -p 8080:80 -v ~/galaxy_storage/:/export/ maurijlozano/microomics`
@@ -85,7 +85,7 @@ En este comando, el texto siguiente *"~/galaxy_storage/"* debe ser reemplazado p
 Para la realización del TP, además de esta guía se pueden mirar los tutoriales de la página [Galaxy Training!](https://galaxyproject.github.io/training-material/topics/introduction/tutorials/galaxy-intro-ngs-data-managment/tutorial.html) 
 
 
-# Crear historia
+## Crear historia
 
 * Hacer un click en el icono de un engranaje (**History options**) en la parte superior del panel **history**
 * Hacer un click en **Create New**
@@ -93,11 +93,11 @@ Para la realización del TP, además de esta guía se pueden mirar los tutoriale
 * Escribir el nuevo nombre
 
 
-# Cargando los datos de secuenciación
+## Cargando los datos de secuenciación
 Como ya se vio en la teoría existen diversas tecnologías de secuenciación, a partir de las cuales obtendremos uno o múltiples archivos, en general, de tipo FASTQ.
 Para comenzar el análisis de las secuencias, la primer etapa es cargarlas en el servidor de galaxy. Nosotros ahora estamos trabajando en una instancia local del servidor, por lo que la carga de archivos será rápida. **Recuerden, que si utilizaran el servidor online, según el tamaño de los archivos la carga puede ser lenta, y para archivos grandes (> 2gb) es necesario utilizar un ftp.**
 
-## Procedimiento
+**Procedimiento**  
 1. En el panel de la izquierda, seleccionar el icono **upload**, o seleccionar **Get Data** -> **Upload File from your computer**
     * Seleccionar la opción: **chose local file**
 Recuerde que pueden cargarse múltiples archivos en una sola operación.
@@ -117,7 +117,7 @@ ej. Se cuenta con cuatro archivos correspondientes a un experimento de secuencia
     └─ ─ ─ ─ ─ ─ ┘                                 └─────────────┘
 ```
 
-## Como crear una colección!
+### Como crear una colección!
 1. Clickear en la tick-box
 2. Seleccionar los dataset de la historia a incluir en la colección
 3. Clickear en **for all selected**
@@ -127,17 +127,17 @@ ej. Se cuenta con cuatro archivos correspondientes a un experimento de secuencia
         * En este caso se pueden usar filtros para que se seleccionen automáticamente los pares de muestras
         * Para lecturas pareadas es conveniente generar ambos tipos de colecciones.
 
-### También se puede cargar las secuencias directamente a una colección!
+#### También se puede cargar las secuencias directamente a una colección!
 
-## Operaciones con colecciones
+### Operaciones con colecciones
 1. Renombrar, para facilitar su identificación
 2. Etiquetar: hay dos tipos de etiquetas que facilitan el seguimiento de los datos
-    * Para crear una etiqueta, clickear an el icono de etiqueta (tag). Hay dos tipos de etiquetas:
+    * Para crear una etiqueta, clickear en el icono de etiqueta (tag). Hay dos tipos de etiquetas:
         * normales
         * hashtag (#) -> estas se propagan a los resultados!
 
-# Manipulación y control de calidad de archivos FASTQ
-## ¿Qué es el formato FASTQ?
+## Manipulación y control de calidad de archivos FASTQ
+### ¿Qué es el formato FASTQ?
 El formato FASTQ es un formato para datos de secuenciación que además de incluir la secuencia nucleotídica para cada lectura incluye la *calidad* para cada posición. En la actualidad, el estándar es el formato FASTQ sanger que se muestra a continuación.
 
 ```
@@ -147,15 +147,15 @@ CCTACGGGTGGCAGCAGTGAGGAATATTGGTCAATGGACGGAAGTCTGAACCAGCCAAGTAGCGTGCAG
 ABC8C,:@F:CE8,B-,C,-6-9-C,CE9-CC--C-<-C++,,+;CE<,,CD,CEFC,@E9<FCFCF?9
 ```
 
-La primer linea para cada lectura contiene un **@** seguido de una identificación (read ID) e información adicional de la corrida de secuenciación.
-La segunda linea contiene la secuencia asignada.
-La tercera linea contiene un **+**, opcionalmente seguido de más información.
-La cuarta linea contiene el puntaje de **calidad** codificado como una serie de caracteres ASCII. Para secuencias FASTQ Illumina >1.8 la codificación es Phred+33 - ASCII desde el caracter 33(!) al 126(~).
-La calidad Q es un entero representando la probabilidad *p* de que la base asignada sea incorrecta. Para una probabilidad menor a 0.05 -> Q tiene que ser mayor a ~13. **Q = -10 log(p)** 
-En general, el punto de corte utilizado es un valor de ~>20, correspondiente a una p < 0.01, es decir un error cada 100 bases (99% de precisión).
+La primer linea para cada lectura contiene un **@** seguido de una identificación (read ID) e información adicional de la corrida de secuenciación.  
+La segunda linea contiene la secuencia asignada.  
+La tercera linea contiene un **+**, opcionalmente seguido de más información.  
+La cuarta linea contiene el puntaje de **calidad** codificado como una serie de caracteres ASCII. Para secuencias FASTQ Illumina >1.8 la codificación es Phred+33 - ASCII desde el caracter 33(!) al 126(~).  
+La calidad Q es un entero representando la probabilidad *p* de que la base asignada sea incorrecta. Para una probabilidad menor a 0.05 -> Q tiene que ser mayor a ~13. **Q = -10 log(p)**  
+En general, el punto de corte utilizado es un valor de ~>20, correspondiente a una p < 0.01, es decir un error cada 100 bases (99% de precisión).  
 
-## Distintos formatos de archivo FASTQ
-### Paired end vs mate-pair
+### Distintos formatos de archivo FASTQ
+#### Paired end vs mate-pair
 Existen distintos tipos de experimentos de secuenciación, que generan diferentes tipos de archivos FASTQ. Estos experimentos fueron pensados con dos objetivos: a. aumentar el largo de cada lectura (paired-end) y b. conectar regiones genómicas alejadas en una longitud determinada (2kb, 8kb, etc) para lograr el ensamblado de genomas cerrados (mate-pair). Con el advenimiento de los métodos de secuenciación de fragmentos largos (Nanopore, PACBIO) la tecnología mate-pair está dejándose de usar.  
 
 En ambos casos un fragmento determinado de la biblioteca de ADN es secuenciado de ambos extremos, quedando ambas secuencias vinculadas (ver ID de la secuencias). En estos casos se pueden obtener dos tipos de archivos FASTQ: 
@@ -195,14 +195,14 @@ CCTAACCCTAACCCTAACCCTAACCCTAACCCTAACCCTAACCCTAAC
 ## Determinando la calidad de las lecturas - FastQC
 La principal herramienta que vamos a usar es FastQC. Adicionalmente, el análisis de muestras múltiples se puede realizar utilizando MultiQC, esta herramienta toma el output de varios análisis de FastQC y los muestra de forma comparativa.
 
-1. En el panel de herramientas, seleccionar FASTQ Quality control -> FastQC
-    * En *Short read data from your current history* seleccionar las lecturas a analizar (este procedimiento debe realizarse para cada lectura). *Acá, se puede elegir cargar una lista o colección!*. Lo mejor es usar una lista no pareada para poder analizar los datos en conjunto con MultiQC.
+1. En el panel de herramientas, seleccionar Quality control -> FastQC
+    * En *Short read data from your current history* seleccionar las lecturas a analizar (este procedimiento debe realizarse para cada lectura). *Acá, se puede elegir cargar una lista o colección!*. Lo mejor es usar una lista *no pareada* para poder analizar los datos en conjunto con MultiQC.
 
 * FastQC generará dos archivos: RawData y Webpage.
 * En la *historia* abrir el archivo html generado, haciendo click en el icono del ojo.
 * Diferentes datos para analizar
     * Per base sequence quality: x= posición a lo largo de las lecturas, y= calidad (Phred). 
-    * Per base sequence content: x= posición a lo largo de las lecturas, y= frecuencia de cada bases
+    * Per base sequence content: x= posición a lo largo de las lecturas, y= frecuencia de cada base
     * Per base N content: x= posición a lo largo de las lecturas, y= %N
     * Adapter Content: x= posición a lo largo de las lecturas, y= % Adaptadores
     * Per sequence quality scores: x= calidad (Phred), y= número de secuencias
@@ -284,13 +284,12 @@ Para secuencias pareadas Trimmomatic devuelve dos resultados, uno en el que ambo
 [Mirar como funciona el algoritmo de Cutadapt!](https://galaxyproject.github.io/training-material/topics/sequence-analysis/tutorials/quality-control/tutorial.html)
 
 ## Ensamblado de la secuencias utilizando Unicycler
-Unicycler es un ensamblador híbrido para genomas bacterianos. Puede ensamblar lecturas generadas con la plataforma Illumina por medio de SPAdes, pero tambien puede utilizar lecturas largas generadas con PacBio o Nanopore, utilizando una tubería *miniasm+Racon*. Para generar el mejor ensamblado, si se dispone de lecturas cortas y largas, unicycler realizará un ensamblado híbrido facilitando la obtención de un genoma cerrado de alta calidad.  
+Unicycler es un ensamblador híbrido para genomas bacterianos. Puede ensamblar lecturas generadas con la plataforma Illumina por medio de SPAdes, pero tambien puede utilizar lecturas largas generadas con PacBio o Nanopore utilizando una tubería *miniasm+Racon*. Para generar el mejor ensamblado, si se dispone de lecturas cortas y largas, unicycler realizará un ensamblado híbrido facilitando la obtención de un genoma cerrado de alta calidad.  
 Para más información mirar la página de [Unicycler](https://github.com/rrwick/Unicycler)
 
 Las opciones son las siguientes:
-* Paired or Single end data?  
-  Select between paired and single end data
-    *Select a paired collection
+* Paired or Single end data?  -> seleccionar el tipo de datos de secuencia
+ *Select a paired collection -> seleccionar los datos obtenidos por trimmomatic
     
 * Select long reads. If there are no long reads, leave this empty
 
@@ -299,29 +298,29 @@ Las opciones son las siguientes:
 * Exclude contigs from the FASTA file which are shorter than this length (bp) -> defecto 100  
 * The expected number of linear (i.e. non-circular) sequences in the assembly -> defecto 0  
 
-El resto de los parámetros se pueden dejar en un principio por defecto. Hay muchos parámetros que corresponden otros programas utilizados en la tubería, principalmente SPAdes, TBLASTN, Pilon, etc.  
+El resto de los parámetros se pueden dejar en un principio por defecto. Hay muchos parámetros que corresponden a otros programas utilizados en la tubería, principalmente SPAdes, TBLASTN, Pilon, etc.  
 
 Unicycler generará dos archivos: Final Assembly y Final Assembly Graph
 
 
 ## Análisis de la calidad del ensamblado mediante QUAST
-Quast es un programa muy completo para analizar la calidad de un genoma ensamblado *de novo*, incluyendo además la opción de búsqueda y anotación de genes (Glimmer o GeneMarkS). Si se cuenta con un genoma de referencia, realizará además una serie de análisis de interés, como la búsqueda de polimorfismos, el alineamiento de los contigs al genoma de referencia.
+Quast es un programa muy completo para analizar la calidad de un genoma ensamblado *de novo*, incluyendo además la opción de búsqueda y anotación de genes (Glimmer o GeneMarkS). Si se cuenta con un genoma de referencia, realizará además una serie de análisis de interés, como la búsqueda de polimorfismos y el alineamiento de los contigs al genoma de referencia.
 
 Existen una serie de parámetros de uso común para evalaur la calidad de un ensamblado:
 **N50** es la longitud del contig para el cual, si sumamos su longitud y la de todos los contigs de mayor tamaño, tenemos por lo menos el 50% del total secuenciado.  
 **NG50**, solo se calcula si tenemos un genoma de referencia, y es igual a N50, pero tomando como largo total el del genoma de referencia.  
 Análogamente se definen N75 y NG75.  
-**L50** (L75, LG50, LG75) es el número mínimo de contigs cuyo largo sumado is mayor al 50% del largo total ensamblado.  
-**NAXX** (NA50,NGA50, ...) corresponde a los valores anteriores pero calculados teniendo en cuenta los alineamientos en vez de los contigs.  
+**L50** (L75, LG50, LG75) es el número mínimo de contigs cuyo largo sumado es mayor al 50% del largo total ensamblado.  
+**NAxx** (NA50,NGA50, ...) corresponde a los valores anteriores pero calculados teniendo en cuenta los alineamientos en vez de los contigs.  
 Si utilizamos un genoma de referencia, el Quast reportará también los contigs que están mal ensamblados (misassemblies) con respecto a la referencia. Para que un contig sea reportado como mal ensamblado debera alinear incorrectamente con el genoma de referencia, esto es, por ejemplo:  
-* relocation: el extremo izquierdo alinea a más de 1kb de distancia del extremo derecho en el genoma de referencia, o están solapados en más de 1kb.  
+* relocation: el extremo izquierdo alinea a más de 1kb de distancia del extremo derecho en el genoma de referencia, o están solapados en más de 1kb (Los contigs no son perfectamente contiguos).  
 * translocation: las secuencias alinean en cromosomas diferentes  
 * inversion: la secuencia alinea en hebras diferentes  
 Para más información mirar el [manual](http://quast.bioinf.spbau.ru/manual.html).  
 
 **Para correr Quast completar los siguientes campos:**
 * Use customized names for the input files? -> si queremos nombres personalizados en los gráficos  
-   * Contigs/scaffolds file -> seleccionar el archivo Final Assembly
+   * Contigs/scaffolds file -> seleccionar el archivo Final Assembly genardo por Unicycler
 * Type of assembly -> Genome  
 * Use a reference genome? -> yes  
    * Reference genome -> seleccionar el genoma de referencia
@@ -354,7 +353,7 @@ Como resultado, genera un archivo anotado en difenentes formatos, incluyendo GFF
 * Locus tag counter increment -> 1
 * GFF version -> versión del formato gff -> 3
 * Force GenBank/ENA/DDJB compliance -> si queremos que sea compatible con genbank
-* Add 'gene' features for each 'CDS' feature -> NO/Yes
+* Add 'gene' features for each 'CDS' feature -> No/Yes
 * Minimum contig size -> 200 (NCBI needs 200)
 
 Luego hay parámetros que describen el centro de secuenciamiento, especie, género, etc.
@@ -376,7 +375,6 @@ Luego hay parámetros que describen el centro de secuenciamiento, especie, géne
 * Additional outputs
    * Select/Unselect all
       * Annotation in GFF3 format, containing both sequences and annotations (.gff)
-
       * Standard GenBank file. If the input was a multi-FASTA, then this will be a multi-GenBank, with one record for each sequence (.gbk)
       * Nucleotide FASTA file of the input contig sequences (.fna)
       * Protein FASTA file of the translated CDS sequences (.faa)
@@ -390,16 +388,15 @@ Luego hay parámetros que describen el centro de secuenciamiento, especie, géne
 
 ## Búsqueda de variantes polimórficas
 
-En esta parte utilizaremos el software Snippy para detectar cambios entre el genoma secuenciado y el genoma de referencia. El programa [Snippy](https://github.com/tseemann/snippy
-) está diseñado con la velocidad en mente y es capaz de utilizar todos los procesadores disponibles.
+En esta parte utilizaremos el software Snippy para detectar cambios entre el genoma secuenciado y el genoma de referencia. El programa [Snippy](https://github.com/tseemann/snippy) está diseñado con la velocidad en mente y es capaz de utilizar todos los procesadores/nucleos disponibles.  
 Como resultado genera una serie de archivos, entre ellos:
 * Tabla de snps -> una tabla con campos separados por tabulaciones o comas 
 * Archivo VCF -> Variant Call Format es un derivado de GFF, para indicar las variaciones genómicas. Una descripción del formato VCF se puede ver en este [enlace](http://vcftools.sourceforge.net/VCF-poster.pdf).
 
 **Procedimiento**
-* Reference File (either in fasta or genbank format)
-   * Single or Paired-end reads
-       * Select a paired collection
+* Reference File (either in fasta or genbank format) -> usar el formato fasta (El gbk esta tirando un error.. :( )
+* Single or Paired-end reads
+   * Select a paired collection -> seleccionar las lecturas procesadas con trimmomatic
 Luego hay una serie de parámetros avanzados que los dejaremos como están, y la selección de los formatos de salida que queremos.
 * Output selection
    * Select/Unselect all
@@ -424,7 +421,7 @@ Para mapear los contigs contra el genoma de referencia utilizaremos el programa 
 * Select TARGET sequnce(s) to align against -> 'from your history'
    * Select a reference dataset -> seleccionar el genoma de referencia
 * Select QUERY sequence(s) -> seleccionar los contigs obtenidos por el ensamlador
-Solo modificaremos alguna de la opciones para lograr que los fragmentos alineados sean lo más largo posible.
+Solo modificaremos alguna de la opciones para lograr que los fragmentos alineados sean largos.
 * Chaining
    * Perform chaining of HSPs with no penalties -> yes
 * Gapped extension
@@ -451,7 +448,7 @@ Luego hay que cargar la información de las pistas que queremos ver. Acá podemo
    * BAM pilup: lecturas mapedas por Snippy
    * GFF3: SNPs en GFF3 obtenidos con Snippy
 
-Por cada una de estos items crearemos un track group, y dentro cargaremos las pistas de interés.
+Por cada uno de estos items crearemos un track group, y dentro cargaremos las pistas de interés.
 
 * Track Group
    * Insert Track Group
