@@ -579,49 +579,49 @@ Mas info en las especificaciones del formato [SAM](http://samtools.github.io/hts
 
 #### Alineamiento
 
-Col 	Field 	Type   	Brief Description
-1     QNAME 	String   Nombre de la secuencia (PE: o del par de lecturas)
-2     FLAG   	Integer  bitwise FLAG: da información sobre el mapeo. Ver abajo
-3     RNAME  	String 	Nombre de la secuencia de referencia
-4     POS    	Integer	La posición más a la izquierda de la 1-base mapeada (0 si no mapeo)
-5     MAPQ   	Integer	MAPping Quality (Phred)
-6     CIGAR 	String 	CIGAR String (Información detallada del alineamiento)
-7     RNEXT 	String 	Solo en PE. nombre de la secuencia de referencia del alineamiento del mate(next read)
-8     PNEXT    Integer	Solo en PE. La posición más a la izquierda de la 1-base mapeada del  mate(next read)
-9     TLEN 	   Integer	Solo en PE. Largo inferido del fragmento
-10    SEQ 	   String 	Secuencia sin indels de hebra directa de la lectura alineada
-11    QUAL 	   String 	ASCII Phred-scaled base QUALity+33
-12    OPT   	depende  Campos opcionales. TA,Tipo, ver abajo.
+Col 	Field 	Type   	Brief Description  
+1     QNAME 	String   Nombre de la secuencia (PE: o del par de lecturas)  
+2     FLAG   	Integer  bitwise FLAG: da información sobre el mapeo. Ver abajo  
+3     RNAME  	String 	Nombre de la secuencia de referencia  
+4     POS    	Integer	La posición más a la izquierda de la 1-base mapeada (0 si no mapeo)  
+5     MAPQ   	Integer	MAPping Quality (Phred)  
+6     CIGAR 	String 	CIGAR String (Información detallada del alineamiento)  
+7     RNEXT 	String 	Solo en PE. nombre de la secuencia de referencia del alineamiento del mate(next read)  
+8     PNEXT    Integer	Solo en PE. La posición más a la izquierda de la 1-base mapeada del  mate(next read)  
+9     TLEN 	   Integer	Solo en PE. Largo inferido del fragmento  
+10    SEQ 	   String 	Secuencia sin indels de hebra directa de la lectura alineada  
+11    QUAL 	   String 	ASCII Phred-scaled base QUALity+33  
+12    OPT   	depende  Campos opcionales. TA,Tipo, ver abajo.  
 
-*Ej.*
-<QNAME> <FLAG> <RNAME> <POS> <MAPQ> <CIGAR> <RNEXT> <PNEXT> <TLEN>    <SEQ>       <QUAL>     <OPT>
-read1     83     chrI  15364   30      51M     =     15535   232    CCA..CTCG     BB?H..    NM:i:0
+*Ej.*  
+<QNAME> <FLAG> <RNAME> <POS> <MAPQ> <CIGAR> <RNEXT> <PNEXT> <TLEN>    <SEQ>       <QUAL>     <OPT>  
+read1     83     chrI  15364   30      51M     =     15535   232    CCA..CTCG     BB?H..    NM:i:0  
 
 
 #### El campo **flag**
-El campo flag codifica en un número diferente información sobre la lectura. El número se genera a partir de asignar 0 (No) o 1 (Si) a distintas características de la lectura.
-Ej.
-Binario     dec   Hex   Descripción
-00000000001    1 -> 0x1   Es la lectura pareada? 0 -> No 1 -> SI
-00000000010    2 -> 0x2   Están las dos lecturas correctamente mapeadas?
-00000000100    4 -> 0x4   La lectura no mapeo?
-00000001000    8 -> 0x8   La lectura pareda mapeo correctamente?
-00000010000   16 -> 0x10  La lectura mapeo a la hebra reversa?
-00000100000   32 -> 0x20  La lectura pareada mapeo en la hebra reversa?
-00001000000   64 -> 0x40  Es la lectura la primera del par?
-00010000000  128 -> 0x80  es la segunda del par?
-00100000000  256 -> 0x100 no es un alineamiento primario?
-01000000000  512 -> 0x200 La lectura falla la prueba de calidad?
-10000000000 1024 -> 0x400 La lectura es un duplicado óptico o de PCR?
-10000000000 2048 -> 0x800 es un alineamiento suplementario?
+El campo flag codifica en un número diferente información sobre la lectura. El número se genera a partir de asignar 0 (No) o 1 (Si) a distintas características de la lectura.  
+Ej.  
+Binario     dec   Hex   Descripción  
+00000000001    1 -> 0x1   Es la lectura pareada? 0 -> No 1 -> SI  
+00000000010    2 -> 0x2   Están las dos lecturas correctamente mapeadas?  
+00000000100    4 -> 0x4   La lectura no mapeo?  
+00000001000    8 -> 0x8   La lectura pareda mapeo correctamente?  
+00000010000   16 -> 0x10  La lectura mapeo a la hebra reversa?  
+00000100000   32 -> 0x20  La lectura pareada mapeo en la hebra reversa?  
+00001000000   64 -> 0x40  Es la lectura la primera del par?  
+00010000000  128 -> 0x80  es la segunda del par?  
+00100000000  256 -> 0x100 no es un alineamiento primario?  
+01000000000  512 -> 0x200 La lectura falla la prueba de calidad?  
+10000000000 1024 -> 0x400 La lectura es un duplicado óptico o de PCR?  
+10000000000 2048 -> 0x800 es un alineamiento suplementario?  
 
-Los números se suman para generar un código decimal. Ej.
-flag 69 -> (= 1 + 4 + 64) lectura pareada, primera del par y no mapeo.
-Para ver los diferentes flags es útil la siguiente página: [Flags](https://broadinstitute.github.io/picard/explain-flags.html)
+Los números se suman para generar un código decimal. Ej.  
+flag 69 -> (= 1 + 4 + 64) lectura pareada, primera del par y no mapeo.  
+Para ver los diferentes flags es útil la siguiente página: [Flags](https://broadinstitute.github.io/picard/explain-flags.html)  
 
 #### El campo **CIGAR**
-CIGAR viene de **"Concise Idiosyncratic Gapped Alignment Report"**. Contiene información sobre las operaciones que tuvieron que hacerse para poder mapear la secuencia.
-Las operaciones son las siguientes:
+CIGAR viene de **"Concise Idiosyncratic Gapped Alignment Report"**. Contiene información sobre las operaciones que tuvieron que hacerse para poder mapear la secuencia.  
+Las operaciones son las siguientes:  
 * M - Alineamiento (puede ser match o mismatch)
 * I - Inserción en la lectura con respecto al genoma de referencia
 * D - Deleción en la lectura con respecto al genoma de referencia
@@ -632,15 +632,15 @@ Las operaciones son las siguientes:
 * = - Sequence match (no muy usado)
 * X - Sequence mismatch (no muy usado)
 
-La suma de todos los simbolos debe ser igual al largo de la lectura. Ej.
-Referencia  A**GATAGCTG   CIGAR        Explicación
+La suma de todos los simbolos debe ser igual al largo de la lectura. Ej.  
+Referencia  A**GATAGCTG   CIGAR        Explicación  
 lectura     AAGGATA*CTG   1M2I4M1D3M   1 match, 2 inserciones, 4 matches, 1 deleción y 3 matches! 
 
 #### Los opcionales!
-Los campos opcionales se incluyen en el último campo del BAM, con la sintaxis: <TAG>:<TYPE>:<VALUE>
-Donde type puede ser de las siguientes clases: A - Character, i - Integer, f - Float number, Z - String, H - Hex string.
-La etiqueta varía según el ensamblador, pueden ser: AS (alignment score), BC (Barcode sequence), HI (cual es la primer posición de la lectura que alinea), NH (Número de alineamientos para la secuencia), NM (distancia de la secuencia a la referencia, es 0 si son idénticas), MD (Posición exacta de los mismatches) y RG (Read Group).
-Los Tags comenzando con X, Y y Z no están estandarizadas. Por ejemplo XS, es usada por TopHat para indicar la hebra, mientras que el mismo tag es usado por BWA y Bowtie2 para guardar el score del mejor alinemiento, en casos de lecturas que mapean en sitios múltiples.
+Los campos opcionales se incluyen en el último campo del BAM, con la sintaxis: <TAG>:<TYPE>:<VALUE>  
+Donde type puede ser de las siguientes clases: A - Character, i - Integer, f - Float number, Z - String, H - Hex string.  
+La etiqueta varía según el ensamblador, pueden ser: AS (alignment score), BC (Barcode sequence), HI (cual es la primer posición de la lectura que alinea), NH (Número de alineamientos para la secuencia), NM (distancia de la secuencia a la referencia, es 0 si son idénticas), MD (Posición exacta de los mismatches) y RG (Read Group).  
+Los Tags comenzando con X, Y y Z no están estandarizadas. Por ejemplo XS, es usada por TopHat para indicar la hebra, mientras que el mismo tag es usado por BWA y Bowtie2 para guardar el score del mejor alinemiento, en casos de lecturas que mapean en sitios múltiples.  
 
 #### Otra opción BWA / BWA-MEM (No instalado)
 Otro mapeador altamente utilizado es BWA. 
@@ -731,9 +731,9 @@ Podemos hacer un heatmap para tratar de ver genes con comportamiento similar en 
     * Bajar la tabla filtrada y agregar los headers!
     * Subir la tabla con la herrramienta upload
 
-Para el Heatmap que queremos crear necesitamos una tabla con los recuentos normalizados de todas las muestras y para los genes seleccionados como diferencialmente expresados. Para esto tenemos que extraer de la tabla de recuentos normalizados las entradas correspondientes a los IDs de la tabla de expresión diferencial de Deseq2.
+Para el Heatmap que queremos crear necesitamos una tabla con los recuentos normalizados de todas las muestras y para los genes seleccionados como diferencialmente expresados. Para esto tenemos que extraer de la tabla de recuentos normalizados las entradas correspondientes a los IDs de la tabla de expresión diferencial de Deseq2.  
 
-*  Esto se puede hacer utilizando la función **Compare two Datasets**  
+*  Esto se puede hacer utilizando la función **Join two Datasets side by side** on a specified field  
    * join -> seleccionar la tabla de recuentos normalizados
       * using column -> 1
    * with -> seleccionar tabla filtrada con encabezados
@@ -743,7 +743,7 @@ Para el Heatmap que queremos crear necesitamos una tabla con los recuentos norma
    * Fill empty columns -> No
    * Keep the header lines -> Yes
 
-Ahora nos quedamos con las primeras 7 columnas
+Ahora nos quedamos con las primeras 7 columnas  
 * Cut columns from a table (Galaxy Version 1.0.2)
    * Cut columns -> c1,c2,c3,c4,c5,c6,c7
    * Delimited by -> tab
