@@ -354,50 +354,122 @@ Como resultado, genera un archivo anotado en difenentes formatos, incluyendo GFF
 * Locus tag counter increment -> 1
 * GFF version -> versión del formato gff -> 3
 * Force GenBank/ENA/DDJB compliance -> si queremos que sea compatible con genbank
+* Add 'gene' features for each 'CDS' feature -> NO/Yes
+* Minimum contig size -> 200 (NCBI needs 200)
+
+Luego hay parámetros que describen el centro de secuenciamiento, especie, género, etc.
+* Sequencing centre ID (--centre)
+* Genus name (--genus)
+* Species name (--species)
+* Strain name (--strain)
+* Plasmid name or identifier (--plasmid)
+* Kingdom (--kingdom) -> Bacteria
+   * Genetic code (transl_table) -> 11 (se elige automaticamente con la selección del reino)
+* Use genus-specific BLAST database -> Tiene que estar instalado
+* Optional FASTA file of trusted proteins to first annotate from (--proteins)
+* Improve gene predictions for highly fragmented genomes (--metagenome) -> No
+* Fast mode (--fast) -> No
+* Similarity e-value cut-off -> 0.000001
+* Enable searching for ncRNAs with Infernal+Rfam (SLOW!) -> Yes/No
+* Don't run rRNA search with Barrnap -> No
+* Don't run tRNA search with Aragorn -> No
+* Additional outputs
+   * Select/Unselect all
+      * Annotation in GFF3 format, containing both sequences and annotations (.gff)
+
+      * Standard GenBank file. If the input was a multi-FASTA, then this will be a multi-GenBank, with one record for each sequence (.gbk)
+      * Nucleotide FASTA file of the input contig sequences (.fna)
+      * Protein FASTA file of the translated CDS sequences (.faa)
+      * Nucleotide FASTA file of all the annotated sequences, not just CDS (.ffn)
+      * An ASN1 format "Sequin" file for submission to GenBank. It needs to be edited to set the correct taxonomy, authors, related publication, etc. (.sqn)
+      * Nucleotide FASTA file of the input contig sequences, with extra Sequin tags in the sequence description lines (.fsa)
+      * Feature Table file (.tbl)
+      * Annotations in tabular format including COGs etc.
+      * Unacceptable annotations - the NCBI discrepancy report (.err)
+      * Statistics relating to the annotated features found (.txt)
+
+## Búsqueda de variantes polimórficas
+
+En esta parte utilizaremos el software Snippy para detectar cambios entre el genoma secuenciado y el genoma de referencia. El programa [Snippy](https://github.com/tseemann/snippy
+) está diseñado con la velocidad en mente y es capaz de utilizar todos los procesadores disponibles.
+Como resultado genera una serie de archivos, entre ellos:
+* Tabla de snps -> una tabla con campos separados por tabulaciones o comas 
+* Archivo VCF -> Variant Call Format es un derivado de GFF, para indicar las variaciones genómicas. Una descripción del formato VCF se puede ver en este [enlace](http://vcftools.sourceforge.net/VCF-poster.pdf).
+
+**Procedimiento**
+* Reference File (either in fasta or genbank format)
+   * Single or Paired-end reads
+       * Select a paired collection
+Luego hay una serie de parámetros avanzados que los dejaremos como están, y la selección de los formatos de salida que queremos.
+* Output selection
+   * Select/Unselect all
+      * The final annotated variants in VCF format
+      * The variants in GFF3 format
+      * A simple tab-separated summary of all the variants
+      * A summary of the samples and mapping
+      * A log file with the commands run and their outputs
+      * A version of the reference but with - at position with depth=0 and N for 0 to depth to --mincov (does not have variants)
+      * A version of the reference genome with all variants instantiated
+      * Output of samtools depth for the .bam file
+      * The alignments in BAM format. Note that multi-mapping and unmapped reads are not present.
+      * Zipped files needed for input into snippy-core
+
+De estos formatos de salida seleccionaremos las variantes en formato VCF, GFF3, la tabla separada por tabs y el archivo BAM. Este último lo seleccionamos para realziar la visualización con JBROWSE, contiene todas las lecturas que mapearon contra el genoma de referencia con el software BWA.
 
 
-Equivalent to --addgenes --mincontiglen 200 --centre Prokka (or other centre specified below)
-Add 'gene' features for each 'CDS' feature (--addgenes)
-Minimum contig size (--mincontiglen)
-200
-NCBI needs 200
-Sequencing centre ID (--centre)
-Genus name (--genus)
-May be used to aid annotation, see --usegenus below
-Species name (--species)
-Strain name (--strain)
-Plasmid name or identifier (--plasmid)
-Kingdom (--kingdom)
-Genetic code (transl_table)
-11
-Use genus-specific BLAST database (--usegenus)
-Will use the BLAST database for the genus specified above, if installed
-Optional FASTA file of trusted proteins to first annotate from (--proteins)
-Improve gene predictions for highly fragmented genomes (--metagenome)
-Will set --meta option for Prodigal
-Fast mode (--fast)
-Skip CDS /product searching
-Similarity e-value cut-off
-0.000001
-Enable searching for ncRNAs with Infernal+Rfam (SLOW!) (--rfam)
-Don't run rRNA search with Barrnap
-Don't run tRNA search with Aragorn
-Additional outputs
-Select/Unselect all
-Annotation in GFF3 format, containing both sequences and annotations (.gff)
-Standard GenBank file. If the input was a multi-FASTA, then this will be a multi-GenBank, with one record for each sequence (.gbk)
-Nucleotide FASTA file of the input contig sequences (.fna)
-Protein FASTA file of the translated CDS sequences (.faa)
-Nucleotide FASTA file of all the annotated sequences, not just CDS (.ffn)
-An ASN1 format "Sequin" file for submission to GenBank. It needs to be edited to set the correct taxonomy, authors, related publication, etc. (.sqn)
-Nucleotide FASTA file of the input contig sequences, with extra Sequin tags in the sequence description lines (.fsa)
-Feature Table file (.tbl)
-Annotations in tabular format including COGs etc.
-Unacceptable annotations - the NCBI discrepancy report (.err)
-Statistics relating to the annotated features found (.txt)
+## Alineamiento de los Contigs generados con LastZ / Minimap2
+Para mapear los contigs contra el genoma de referencia utilizaremos el programa [LastZ](http://www.bx.psu.edu/miller_lab/dist/README.lastz-1.02.00/README.lastz-1.02.00a.html). 
+
+**Procedimiento**
+* Select TARGET sequnce(s) to align against -> 'from your history'
+   * Select a reference dataset -> seleccionar el genoma de referencia
+* Select QUERY sequence(s) -> seleccionar los contigs obtenidos por el ensamlador
+Solo modificaremos alguna de la opciones para lograr que los fragmentos alineados sean lo más largo posible.
+* Chaining
+   * Perform chaining of HSPs with no penalties -> yes
+* Gapped extension
+   * Perform gapped extension of HSPs -> Yes
+Como resultado obtendremos un archivo BAM que podremos visualizar con programas como JBROWSE, IGV, Tablet, y otros.
+Alternativamente se puede utilizar el programa minimap2 -> este no está instalado, pero se puede instalar ingresando a galaxy con la cuenta de administrador (admin@galaxy.org,admin).
+
+## Visualización de los resultados con JBROWSE
+JBROWSE es un visualizador de alineamientos y lecturas NGS. Para visualizar los resultados necesitamos en general archivos del tipo BAM (Mapeo de secuencias contra una referencia) o del tipo GFF (Genome Features).  
+Las opciones disponibles son:
+
+* Reference genome to display
+   * Use a genome from history -> seleccionar el genoma de referencia
+* Produce Standalone Instance -> Yes
+* Genetic Code -> Standard
+* JBrowse-in-Galaxy Action -> New instance
+
+Luego hay que cargar la información de las pistas que queremos ver. Acá podemos organizar las pistas en varias categorías (Track groups), cada una con varias pistas:
+1. Anotación del genomoa de referencia
+   * GFF3, los datos de anotación del genoma de referencia
+2. Alineamiento de los Contigs
+   * BAM pileup: Resultados del programa LastZ/Minimap2
+3. SNPs
+   * BAM pilup: lecturas mapedas por Snippy
+   * GFF3: SNPs en GFF3 obtenidos con Snippy
+
+Por cada una de estos items crearemos un track group, y dentro cargaremos las pistas de interés.
+
+* Track Group
+   * Insert Track Group
+      * Track Category -> Nombre de la categoria a visualizar
+      * Annotation Track -> Insertar una pista de anotación
+         * Track Type -> seleccionar BAM pileup / GFF según corresponda
+               * Seleccionar los datos desde la historia.
+      * This is match/match_part data -> defecto No
+      * Index this track -> Yes/No
+      * JBrowse Track Type [Advanced] -> las dejamos como están
+      * Track Visibility -> lo dejamos como está
+      * Override Apollo Plugins -> lo dejamos como está
+      * Override Apollo Draggability -> lo dejamos como está
+* General JBROWSE Optional (Advanced) -> lo dejamos como está
+* Plugins -> GC Content -> Acá se puede activar el GC y GC Skew
+   * GC skew es cuando los nucleótidos G o C son más o menos abundantes un una región particular del ADN o ARN. En condiciones de equilibrio (si no hay presiones de seleccion y los nucleótidos están distribuidos al azar) la frecuencia de las cuatro bases en ambas hebras es igual. Sin embargo en la mayoría de las bacterias y algunas arqueas, la composición nucleotídica es asimétrica entre la hebra lider y resagada: la hebra lider contiene en general más G y T. Matematicamente se calcula como -> GC skew = (G - C)/(G + C)
 
 
-  
 <a name="id4"></a>
 Día 2: RNAseq 
 -------------
