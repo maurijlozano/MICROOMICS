@@ -18,11 +18,11 @@ Que los alumnos logren:
 
 ## Programa resumido
 Las actividades del curso constarán de clases teóricas, seminarios y un trabajo práctico.  
-**Día 1**: Genómica (8hs) y meta-genómica. Introducción del tema, estudio de casos y trabajo práctico.  
-**Día 2**: Transcriptómica (8hs). Introducción del tema, estudio de casos y trabajo práctico.  
-**Día 3**: Proteómica (8hs) y Metabolómica(8hs). Introducción del tema y estudio de casos.  
+**Día 1**: Genómica y meta-genómica. Introducción del tema, estudio de casos y trabajo práctico.  
+**Día 2**: Transcriptómica y Genómica comparativa. Introducción del tema, estudio de casos y trabajo práctico.  
+**Día 3**: Proteómica y Metabolómica. Introducción del tema y estudio de casos.  
 **Día 4**: Exposiciones de alumnos. Integración de datos obtenidos con plataformas ómicas.  
-**Día 5**: Exposiciones de alumnos, Casos de estudio integrales. Evaluación
+**Día 5**: Exposiciones de alumnos. Casos de estudio integrales. Evaluación
 
 - **Genómica**: Plataformas de secuenciación. Historia y últimas tecnologías. Procesamiento de lecturas y ensamblado. Anotación de genomas. Homología. Filogenia. Genómica comparativa.
 - **Transcriptómica**: Antecedentes, otros métodos para la evaluación diferencial de la expresión. RNAseq. Procesamiento, análisis y visualización de los resultados. RNAseq de reguladores transcripcionales. Búsqueda de reguladores, mutagenesis y transcriptómica. Búsqueda de determinantes involucrados en la comunicación rizobio-leguminosa durante la simbiosis mediante Dual-RNAseq. Redes regulatorias de la expresión de flagelos en Bradyrhizobium diazoefficiens. Caracterización molecular de los mecanismos que regulan la transferencia conjugativa de plásmidos en rizobios. 
@@ -70,7 +70,7 @@ Dicho esto, como **objetivos del trabajo práctico** nos planteamos los siguient
     
 DATA SETs -> los set de datos que vamos a utilizar se pueden descargar del siguiente [link](http://www.mediafire.com/file/6oq2yk7qkmzjfwy/datasets.tar.gz/file). Los Datos deberían ya estar descargados en las computadoras de la sala, pero los alumnos que utilicen sus notebooks deberán descargar este archivo.    
 
-En la carpeta compartida del curso les dejaremos la bibliografía general del curso. En es carpeta se encuentran dos trabajos: el [primero](https://doi.org/10.12688/f1000research.13598.1) explica de forma general los pasos a seguir para obtener un genoma ensamblado y anotado, y el [segundo](https://doi.org/10.1146/annurev-biodatasci-072018-021255) detalla los pasos y métodos utilizados para el análisis de resultados originados en RNA-seq.
+En la carpeta compartida del curso les dejaremos la bibliografía general. En es carpeta se encuentran dos trabajos: el [primero](https://doi.org/10.12688/f1000research.13598.1) explica de forma general los pasos a seguir para obtener un genoma ensamblado y anotado, y el [segundo](https://doi.org/10.1146/annurev-biodatasci-072018-021255) detalla los pasos y métodos utilizados para el análisis de resultados originados en RNA-seq.
    
 
 <a name="id3"></a>
