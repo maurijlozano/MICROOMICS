@@ -37,16 +37,19 @@ En este documento encontrarán las instrucciones para realizar la instalación t
 
 Adicionalmente, encontrará información sobre la imagen de docker utilizada en el curso en el enlace siguiente [MicroOmics](https://github.com/maurijlozano/MICROOMICS/blob/master/Microomics_docker/Info_docker_Image.md).  
 
+La Bibliografía y otros materiales del curso se encontraran en el siguiente enlace: [->](https://drive.google.com/drive/folders/1231J8jSq__GDQuxX3rKX_zGtJ2AKJOso)
+
 <a name="id2"></a>
 Trabajo Práctico 
 ================
 
 El objetivo de los experimentos de secuenciación es obtener la sucesión de bases nucleotídicas (secuencia) que componen el ADN o ARN. Como ya se vio en las clases teóricas existen diferentes métodos de secuenciación, que a partir de una muestra de ADN/ARN (biblioteca/library) obtienen una colección de fragmentos de secuencia, usualmente cortos llamados comunmente 'lecturas' o **reads**.  
-Los métodos modernos de secuenciación obtienen usualmente números masivos de lecturas por cada experimento. Dado que los métodos de secuenciación no son perfectos, las lecturas generalmente tienen un error asociado, como por ejemplo, la probabilidad de haber asignado un nucleótido incorrecto.
+Los métodos modernos de secuenciación ([1](https://doi.org/10.1016/j.tig.2018.05.008),[2](https://doi.org/10.1038/nrg.2016.49)) obtienen usualmente números masivos de lecturas por cada experimento. Dado que los métodos de secuenciación no son perfectos, las lecturas generalmente tienen un error asociado, como por ejemplo, la probabilidad de haber asignado un nucleótido incorrecto.
 
 Estas secuencias pueden ser obtenidas a partir de muestras de ADN o ARN con diferentes objetivos.
-* ADN: para reconstruir la secuencia genómica de un organismo, para caracterizar la diversidad de un ambiente (secuenciación de 16S rRNA, secuencias ITS, etc) o para caracterizar el metagenoma de un ambiente determinado.
-* ARN: para reconstruir el transcriptoma de un organismo, para estudiar la expresión diferencial de genes o para estudiar el metatranscriptoma asociado a un ambiente determinado.
+* ADN: para reconstruir la secuencia genómica de un organismo, para caracterizar la diversidad de un ambiente (secuenciación de 16S rRNA, secuencias ITS, etc) o para caracterizar el metagenoma de un ambiente determinado.  
+   
+* ARN: para reconstruir el transcriptoma de un organismo, para estudiar la expresión diferencial de genes o para estudiar el metatranscriptoma asociado a un ambiente determinado. Bibliografía:
 
 Dicho esto, como **objetivos del trabajo práctico** nos planteamos los siguientes puntos:
 
@@ -66,6 +69,9 @@ Dicho esto, como **objetivos del trabajo práctico** nos planteamos los siguient
     * Realizar el análisis de expresión diferencial
     
 DATA SETs -> los set de datos que vamos a utilizar se pueden descargar del siguiente [link](http://www.mediafire.com/file/6oq2yk7qkmzjfwy/datasets.tar.gz/file). Los Datos deberían ya estar descargados en las computadoras de la sala, pero los alumnos que utilicen sus notebooks deberán descargar este archivo.    
+
+En la carpeta compartida del curso les dejaremos la bibliografía general del curso. En es carpeta se encuentran dos trabajos: el [primero](https://doi.org/10.12688/f1000research.13598.1) explica de forma general los pasos a seguir para obtener un genoma ensamblado y anotado, y el [segundo](https://doi.org/10.1146/annurev-biodatasci-072018-021255) detalla los pasos y métodos utilizados para el análisis de resultados originados en RNA-seq.
+   
 
 <a name="id3"></a>
 Día 1 - Obtención de la secuencia genómica un Staphylococcus aureus imaginario que posee un genoma reducido 
